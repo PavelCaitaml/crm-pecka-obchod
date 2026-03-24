@@ -6463,10 +6463,6 @@ const STATUS_TO_FOLDER = {
   emailed:"email",  no_contact:"nekontaktovat", termin:"termin",
 }
 
-const todayStr   = () => new Date().toISOString().split("T")[0]
-const todayLabel = () => new Date().toLocaleDateString("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"})
-const uid        = () => Math.random().toString(36).slice(2,9)
-
 // Firebase helpers (injected at runtime)
 async function saveState(data) {
   try { await window._fbSetDoc(window._fbDoc(window._db,"crm","state"), data); }
