@@ -227,35 +227,6 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-/* CALENDAR */
-.cal-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.cal-month{font-size:16px;font-weight:700;min-width:160px;text-align:center}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:20px}
-.cal-dow{text-align:center;font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--muted);text-transform:uppercase;padding:4px 0}
-.cal-day{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:7px 8px;min-height:70px;cursor:pointer;transition:.15s;position:relative}
-.cal-day:hover{border-color:var(--green);background:#F0FBF5}
-.cal-day.today{border-color:var(--green);background:#F0FBF5}
-.cal-day.selected{border-color:var(--ink);background:var(--ink);color:#fff}
-.cal-day.selected .cal-dn{color:#fff}
-.cal-day.empty{background:transparent;border-color:transparent;cursor:default}
-.cal-day.empty:hover{background:transparent;border-color:transparent}
-.cal-dn{font-size:12px;font-weight:700;margin-bottom:5px;color:var(--ink)}
-.cal-day.selected .cal-chips span{background:rgba(255,255,255,.2)!important;color:#fff!important}
-.cal-chips{display:flex;flex-wrap:wrap;gap:2px}
-.cal-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.cal-detail{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--sh)}
-.cal-detail-hd{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.cal-sp-block{margin-bottom:12px;padding:12px;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
-.cal-sp-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.cal-sp-name{font-size:13px;font-weight:700}
-.cal-sp-total{font-size:10px;color:var(--muted)}
-.cal-stat-row{display:flex;gap:6px;flex-wrap:wrap}
-.cal-stat{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.cal-act-list{margin-top:8px;display:flex;flex-direction:column;gap:3px;max-height:120px;overflow-y:auto}
-.cal-act-item{font-size:11px;display:flex;gap:6px;align-items:center;padding:2px 0;border-bottom:1px solid var(--border)}
-.cal-act-item:last-child{border:none}
-.cal-empty-day{text-align:center;padding:30px;color:var(--muted);font-size:13px}
-
   </style>
 </head>
 <body>
@@ -290,6 +261,28 @@ window._db = getFirestore(fbInstance);
 window._fbDoc = doc;
 window._fbSetDoc = setDoc;
 window._fbOnSnapshot = onSnapshot;
+
+// ─── TELEGRAM NOTIFIKACE ─────────────────────────────────────────────────────
+async function sendTelegramNotification(orgName, spName, status) {
+  const statusLabels = {
+    interest: '✅ ZÁJEM',
+    no_interest: '❌ Nezájem',
+    postponed: '⏳ Odložený zájem',
+    emailed: '📧 Email odeslán',
+    no_contact: '🚫 Nekontaktovat',
+    termin: '📅 Má termín',
+  };
+  const label = statusLabels[status] || status;
+  const msg = `🔔 CRM Systém\n\n${label}\n\n🏫 Organizace: ${orgName}\n👤 Obchodník: ${spName}\n⏰ ${new Date().toLocaleString('cs-CZ')}`;
+  try {
+    await fetch('https://api.telegram.org/bot8774474548:AAF9Y5qyNnsYSjYsfy4RLm6g4eYYBhHZiEA/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id:'7943499981', text: msg})
+    });
+  } catch(e) { console.log('Telegram error:', e); }
+}
+
 
 
 
@@ -6492,6 +6485,10 @@ const STATUS_TO_FOLDER = {
   emailed:"email",  no_contact:"nekontaktovat", termin:"termin",
 }
 
+const todayStr   = () => new Date().toISOString().split("T")[0]
+const todayLabel = () => new Date().toLocaleDateString("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"})
+const uid        = () => Math.random().toString(36).slice(2,9)
+
 // Firebase helpers (injected at runtime)
 async function saveState(data) {
   try { await window._fbSetDoc(window._fbDoc(window._db,"crm","state"), data); }
@@ -6692,6 +6689,11 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
 
   const setStatus=(orgId,status)=>{
     setInteractions(p=>[...p.filter(i=>!(i.orgId===orgId&&i.spId===sp.id&&i.date===today&&Object.keys(STATUS_META).includes(i.status))),{id:Date.now(),orgId,spId:sp.id,status,date:today}])
+    // Telegram notifikace při zájmu nebo termínu
+    if(status==='interest'||status==='termin') {
+      const org=[...customOrgs,...ALL_ORGS_DB].find(o=>o.id===orgId)
+      if(org) sendTelegramNotification(org.organization, sp.name, status)
+    }
   }
 
   const addOrg=()=>{
@@ -7001,132 +7003,6 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
 }
 
 // ─── MANAGER DASHBOARD ────────────────────────────────────────────────────────
-function CalendarTab({salespeople,interactions,customOrgs}){
-  const now=new Date()
-  const [year,setYear]=useState(now.getFullYear())
-  const [month,setMonth]=useState(now.getMonth())
-  const [selDay,setSelDay]=useState(todayStr())
-
-  const prevMonth=()=>{if(month===0){setMonth(11);setYear(y=>y-1)}else setMonth(m=>m-1)}
-  const nextMonth=()=>{if(month===11){setMonth(0);setYear(y=>y+1)}else setMonth(m=>m+1)}
-
-  const daysInMonth=new Date(year,month+1,0).getDate()
-  const firstDow=(new Date(year,month,1).getDay()+6)%7 // Monday=0
-
-  const pad=n=>String(n).padStart(2,"0")
-  const dateStr=(d)=>`${year}-${pad(month+1)}-${pad(d)}`
-
-  const monthLabel=new Date(year,month,1).toLocaleDateString("cs-CZ",{month:"long",year:"numeric"})
-
-  // For each day get summary counts
-  const dayData=useMemo(()=>{
-    const map={}
-    interactions.forEach(i=>{
-      if(!map[i.date])map[i.date]={interest:0,no_interest:0,postponed:0,emailed:0,termin:0,no_contact:0,total:0,spIds:new Set()}
-      const d=map[i.date]
-      if(d[i.status]!==undefined)d[i.status]++
-      d.total++
-      d.spIds.add(i.spId)
-    })
-    // convert sets to arrays
-    Object.values(map).forEach(d=>{d.spIds=[...d.spIds]})
-    return map
-  },[interactions])
-
-  // Detail for selected day
-  const selData=useMemo(()=>{
-    const dayIx=interactions.filter(i=>i.date===selDay)
-    return salespeople.map(sp=>{
-      const spIx=dayIx.filter(i=>i.spId===sp.id)
-      return{sp,ix:spIx,
-        interest:spIx.filter(i=>i.status==="interest").length,
-        no_interest:spIx.filter(i=>i.status==="no_interest").length,
-        postponed:spIx.filter(i=>i.status==="postponed").length,
-        emailed:spIx.filter(i=>i.status==="emailed").length,
-        termin:spIx.filter(i=>i.status==="termin").length,
-        no_contact:spIx.filter(i=>i.status==="no_contact").length,
-      }
-    }).filter(s=>s.ix.length>0)
-  },[interactions,selDay,salespeople])
-
-  const todayS=todayStr()
-
-  const selDateLabel=selDay?new Date(selDay+"T12:00:00").toLocaleDateString("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"}):""
-
-  const DOW=["Po","Út","St","Čt","Pá","So","Ne"]
-
-  return(<div style={{display:"flex",flexDirection:"column",gap:16}}>
-    <div className="cal-nav">
-      <button className="btn-ghost" onClick={prevMonth}>←</button>
-      <div className="cal-month">{monthLabel}</div>
-      <button className="btn-ghost" onClick={nextMonth}>→</button>
-      <button className="btn-sm" style={{marginLeft:8}} onClick={()=>{setYear(now.getFullYear());setMonth(now.getMonth());setSelDay(todayStr())}}>Dnes</button>
-    </div>
-
-    <div className="cal-grid">
-      {DOW.map(d=><div key={d} className="cal-dow">{d}</div>)}
-      {Array.from({length:firstDow},(_,i)=><div key={"e"+i} className="cal-day empty"/>)}
-      {Array.from({length:daysInMonth},(_,i)=>{
-        const d=i+1
-        const ds=dateStr(d)
-        const dd=dayData[ds]
-        const isToday=ds===todayS
-        const isSel=ds===selDay
-        return(
-          <div key={d} className={`cal-day ${isToday?"today":""} ${isSel?"selected":""}`} onClick={()=>setSelDay(ds)}>
-            <div className="cal-dn">{d}</div>
-            {dd&&dd.total>0&&<div className="cal-chips">
-              {dd.interest>0&&<span style={{background:"#DCFCE7",color:"#16A34A",fontSize:9,padding:"1px 5px",borderRadius:10,fontWeight:700}}>{dd.interest}✅</span>}
-              {dd.no_interest>0&&<span style={{background:"#FEE2E2",color:"#DC2626",fontSize:9,padding:"1px 5px",borderRadius:10,fontWeight:700}}>{dd.no_interest}❌</span>}
-              {dd.emailed>0&&<span style={{background:"#DBEAFE",color:"#2563EB",fontSize:9,padding:"1px 5px",borderRadius:10,fontWeight:700}}>{dd.emailed}📧</span>}
-              {dd.termin>0&&<span style={{background:"#EDE9FE",color:"#7C3AED",fontSize:9,padding:"1px 5px",borderRadius:10,fontWeight:700}}>{dd.termin}📅</span>}
-              {dd.postponed>0&&<span style={{background:"#FEF3C7",color:"#D97706",fontSize:9,padding:"1px 5px",borderRadius:10,fontWeight:700}}>{dd.postponed}⏳</span>}
-            </div>}
-          </div>
-        )
-      })}
-    </div>
-
-    {selDay&&<div className="cal-detail">
-      <div className="cal-detail-hd">
-        <span>📆 {selDateLabel}</span>
-        {selData.length>0&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:400}}>{interactions.filter(i=>i.date===selDay).length} aktivit · {selData.length} obchodníků</span>}
-      </div>
-      {selData.length===0&&<div className="cal-empty-day">😴 Žádná aktivita tento den</div>}
-      {selData.map(({sp,ix,interest,no_interest,postponed,emailed,termin,no_contact})=>(
-        <div key={sp.id} className="cal-sp-block">
-          <div className="cal-sp-hd">
-            <span style={{fontSize:20}}>{sp.emoji}</span>
-            <div>
-              <div className="cal-sp-name">{sp.name}</div>
-              <div className="cal-sp-total">{ix.length} akcí celkem</div>
-            </div>
-          </div>
-          <div className="cal-stat-row">
-            {interest>0&&<span className="cal-stat" style={{background:"#DCFCE7",color:"#16A34A"}}>✅ Zájem: {interest}</span>}
-            {no_interest>0&&<span className="cal-stat" style={{background:"#FEE2E2",color:"#DC2626"}}>❌ Nezájem: {no_interest}</span>}
-            {emailed>0&&<span className="cal-stat" style={{background:"#DBEAFE",color:"#2563EB"}}>📧 Email: {emailed}</span>}
-            {termin>0&&<span className="cal-stat" style={{background:"#EDE9FE",color:"#7C3AED"}}>📅 Termín: {termin}</span>}
-            {postponed>0&&<span className="cal-stat" style={{background:"#FEF3C7",color:"#D97706"}}>⏳ Odloženo: {postponed}</span>}
-            {no_contact>0&&<span className="cal-stat" style={{background:"#F3F4F6",color:"#6B7280"}}>🚫 Nekont.: {no_contact}</span>}
-          </div>
-          <div className="cal-act-list">
-            {ix.map(i=>{
-              const org=[...customOrgs,...ALL_ORGS_DB].find(o=>o.id===i.orgId)
-              const sm=STATUS_META[i.status]
-              return<div key={i.id} className="cal-act-item">
-                <span>{sm?.icon}</span>
-                <span style={{fontWeight:600,flex:1}}>{org?.organization||"?"}</span>
-                <span style={{color:sm?.color,fontSize:10,whiteSpace:"nowrap"}}>{sm?.label}</span>
-              </div>
-            })}
-          </div>
-        </div>
-      ))}
-    </div>}
-  </div>)
-}
-
 function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,setOrgAssigned,interactions,trainings,setTrainings,orgRequests,setOrgRequests,resolveOrg}){
   const [tab,setTab]=useState("report")
   const today=todayStr()
@@ -7170,7 +7046,7 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
     </div>}
 
     <div className="mgr-tabs">
-      {[["report","📊 Report"],["calendar","📆 Kalendář"],["assign","📋 Přiřadit"],["trainings","📅 Školení"],["pipeline","🔭 Pipeline"]].map(([k,l])=>(
+      {[["report","📊 Report"],["assign","📋 Přiřadit"],["trainings","📅 Školení"],["pipeline","🔭 Pipeline"]].map(([k,l])=>(
         <button key={k} className={`tab-btn ${tab===k?"active":""}`} onClick={()=>setTab(k)}>{l}</button>
       ))}
     </div>
@@ -7201,8 +7077,6 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
         ))}
       </div>
     </>}
-
-    {tab==="calendar"&&<CalendarTab salespeople={salespeople} interactions={interactions} customOrgs={customOrgs}/>}
 
     {tab==="assign"&&<AssignTab salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAssigned={setOrgAssigned}/>}
 
