@@ -305,11 +305,6 @@ const INIT_SP = [
 const ORG_TYPES = ["ZŠ","SŠ","MŠ","MŠ+ZŠ","ZŠ+SŠ","Obec","Ostatní"]
 const ALL_KRAJE = ["Hlavní město Praha", "Jihomoravský kraj", "Jihočeský kraj", "Karlovarský kraj", "Kraj Vysočina", "Královéhradecký kraj", "Liberecký kraj", "Moravskoslezský kraj", "Olomoucký kraj", "Pardubický kraj", "Plzeňský kraj", "Středočeský kraj", "Zlínský kraj", "Ústecký kraj"]
 const ALL_OKRESY = ["Benešov", "Beroun", "Blansko", "Brno-město", "Brno-venkov", "Bruntál", "Břeclav", "Cheb", "Chomutov", "Chrudim", "Domažlice", "Děčín", "Frýdek-Místek", "Havlíčkův Brod", "Hodonín", "Hradec Králové", "Jablonec nad Nisou", "Jeseník", "Jihlava", "Jindřichův Hradec", "Jičín", "Karlovy Vary", "Karviná", "Kladno", "Klatovy", "Kolín", "Kroměříž", "Kutná Hora", "Liberec", "Litoměřice", "Louny", "Mladá Boleslav", "Most", "Mělník", "Nový Jičín", "Nymburk", "Náchod", "Olomouc", "Opava", "Ostrava-město", "Pardubice", "Pelhřimov", "Plzeň-jih", "Plzeň-město", "Plzeň-sever", "Prachatice", "Praha", "Praha-východ", "Prostějov", "Písek", "Přerov", "Rokycany", "Rychnov nad Kněžnou", "Semily", "Sokolov", "Strakonice", "Svitavy", "Tachov", "Teplice", "Trutnov", "Tábor", "Třebíč", "Uherské Hradiště", "Vsetín", "Vyškov", "Zlín", "Znojmo", "Ústí nad Labem", "Ústí nad Orlicí", "Česká Lípa", "České Budějovice", "Český Krumlov", "Šumperk", "Žďár nad Sázavou"]
-const todayStr   = () => new Date().toISOString().split("T")[0]
-const todayLabel = () => new Date().toLocaleDateString("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"})
-const uid        = () => Math.random().toString(36).slice(2,9)
-
-
 const ALL_ORGS_DB = [
 {id:'db1',organization:'ARCHA základní škola a mateřská škola při Církvi československé husitské',contact:'Mgr. Jitka Hřebecká',phone:'311440246',email:'skolaarcha@skolaarcha.org',type:'MŠ+ZŠ',kraj:'',okres:'',population:0,assignedTo:null,addedBy:null},
 {id:'db2',organization:'Mateřská škola a základní škola Sluníčko - Montessori, s.r.o.',contact:'Mgr. Radka Čáslavová',phone:'603984380',email:'slunicko.reditelstvi@seznam.cz',type:'MŠ+ZŠ',kraj:'',okres:'',population:0,assignedTo:null,addedBy:null},
