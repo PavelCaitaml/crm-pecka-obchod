@@ -246,21 +246,24 @@ const { useState, useMemo, useCallback, useEffect, useRef } = React;
 
 
 // ─── FIREBASE ────────────────────────────────────────────────────────────────
-const { initializeApp } = window.fbApp;
-const { getFirestore, doc, setDoc, onSnapshot } = window.fbStore;
-
-const fbInstance = initializeApp({
-  apiKey: "AIzaSyD7vvJXGvAdfhFU5a_biqS3eOiLle2zk3Y",
-  authDomain: "crm-obchod1.firebaseapp.com",
-  projectId: "crm-obchod1",
-  storageBucket: "crm-obchod1.firebasestorage.app",
-  messagingSenderId: "195690446189",
-  appId: "1:195690446189:web:ae8a33e9d916fd967cee64"
-});
-window._db = getFirestore(fbInstance);
-window._fbDoc = doc;
-window._fbSetDoc = setDoc;
-window._fbOnSnapshot = onSnapshot;
+// Firebase se inicializuje až v init(), aby nedošlo k race condition s ES modulem
+function initFirebase() {
+  if (window._db) return; // již inicializováno
+  const { initializeApp } = window.fbApp;
+  const { getFirestore, doc, setDoc, onSnapshot } = window.fbStore;
+  const fbInstance = initializeApp({
+    apiKey: "AIzaSyD7vvJXGvAdfhFU5a_biqS3eOiLle2zk3Y",
+    authDomain: "crm-obchod1.firebaseapp.com",
+    projectId: "crm-obchod1",
+    storageBucket: "crm-obchod1.firebasestorage.app",
+    messagingSenderId: "195690446189",
+    appId: "1:195690446189:web:ae8a33e9d916fd967cee64"
+  });
+  window._db = getFirestore(fbInstance);
+  window._fbDoc = doc;
+  window._fbSetDoc = setDoc;
+  window._fbOnSnapshot = onSnapshot;
+}
 
 // ─── TELEGRAM NOTIFIKACE ─────────────────────────────────────────────────────
 async function sendTelegramNotification(orgName, spName, status) {
@@ -6457,8 +6460,6 @@ const ALL_ORGS_DB = [
 ]
 
 
-const CSS = ""
-
 // ─── STATUS CONFIG ────────────────────────────────────────────────────────────
 const STATUS_META = {
   interest:    {label:"Zájem",          color:"#16A34A",bg:"#DCFCE7",icon:"✅",folder:"zájem"},
@@ -6491,8 +6492,9 @@ const uid        = () => Math.random().toString(36).slice(2,9)
 
 // Firebase helpers (injected at runtime)
 async function saveState(data) {
+  if (!window._db) return;
   try { await window._fbSetDoc(window._fbDoc(window._db,"crm","state"), data); }
-  catch(e) { console.error("Save:", e); }
+  catch(e) { console.error("Save error:", e); }
 }
 
 function CRM() {
@@ -6577,7 +6579,6 @@ function CRM() {
   );
 
   return(<>
-    <style>{CSS}</style>
     <div className="crm">
       <div className="topbar">
         <div className="topbar-brand" onClick={()=>go("home")}>◆ CRM Systém <span className="pill">OBCHOD</span></div>
@@ -7245,6 +7246,7 @@ function AssignTab({salespeople,customOrgs,setCustomOrgs,orgOverrides,setOrgAssi
 
 
 function init() {
+  initFirebase();
   const root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(React.createElement(CRM));
 }
