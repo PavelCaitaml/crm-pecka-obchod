@@ -1,0 +1,203 @@
+name: Denní souhrn CRM
+
+on:
+  schedule:
+    - cron: '0 19 * * *'  # 19:00 UTC = 20:00 CET (zima) / 21:00 CEST (léto)
+  workflow_dispatch:       # možnost spustit ručně kdykoliv
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Odešli denní souhrn na Telegram
+        run: |
+          node << 'EOF'
+          const https = require('https');
+
+          const FIREBASE_PROJECT = 'crm-obchod1';
+          const FIREBASE_API_KEY = 'AIzaSyD7vvJXGvAdfhFU5a_biqS3eOiLle2zk3Y';
+          const TELEGRAM_BOT    = '8774474548:AAF9Y5qyNnsYSjYsfy4RLm6g4eYYBhHZiEA';
+          const TELEGRAM_CHAT   = '7943499981';
+
+          function httpsGet(url) {
+            return new Promise((resolve, reject) => {
+              https.get(url, res => {
+                let data = '';
+                res.on('data', c => data += c);
+                res.on('end', () => { try { resolve(JSON.parse(data)); } catch(e) { reject(e); } });
+              }).on('error', reject);
+            });
+          }
+
+          function httpsPost(url, body) {
+            return new Promise((resolve, reject) => {
+              const data = JSON.stringify(body);
+              const opts = { method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) } };
+              const req = https.request(url, opts, res => {
+                let d = '';
+                res.on('data', c => d += c);
+                res.on('end', () => { try { resolve(JSON.parse(d)); } catch(e) { resolve({}); } });
+              });
+              req.on('error', reject);
+              req.write(data);
+              req.end();
+            });
+          }
+
+          async function main() {
+            const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents/crm/state?key=${FIREBASE_API_KEY}`;
+            const doc = await httpsGet(url);
+
+            if (!doc.fields) {
+              await httpsPost(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`, { chat_id: TELEGRAM_CHAT, text: 'CRM: Nepodařilo se načíst data.' });
+              return;
+            }
+
+            const parseArr = (field) => {
+              if (!field?.arrayValue?.values) return [];
+              return field.arrayValue.values.map(v => {
+                const obj = {};
+                if (v.mapValue?.fields) {
+                  for (const [k, val] of Object.entries(v.mapValue.fields)) {
+                    obj[k] = val.stringValue ?? val.integerValue ?? val.booleanValue ?? null;
+                  }
+                }
+                return obj;
+              });
+            };
+
+            const parseMap = (field) => {
+              if (!field?.mapValue?.fields) return {};
+              const result = {};
+              for (const [k, v] of Object.entries(field.mapValue.fields)) {
+                if (v.mapValue?.fields) {
+                  const inner = {};
+                  for (const [ik, iv] of Object.entries(v.mapValue.fields)) { inner[ik] = iv.stringValue ?? iv.integerValue ?? iv.booleanValue ?? null; }
+                  result[k] = inner;
+                } else { result[k] = v.stringValue ?? v.integerValue ?? null; }
+              }
+              return result;
+            };
+
+            const interactions = parseArr(doc.fields.interactions);
+            const salespeople  = parseArr(doc.fields.salespeople);
+            const customOrgs   = parseArr(doc.fields.customOrgs);
+            const orgOverrides = parseMap(doc.fields.orgOverrides);
+            const tasks        = parseArr(doc.fields.tasks);
+
+            const today = new Date().toISOString().split('T')[0];
+            const todayIx = interactions.filter(i => i.date === today);
+
+            const getOrgName = (orgId) => {
+              const custom = customOrgs.find(o => o.id === orgId);
+              if (custom) return custom.organization;
+              const ov = orgOverrides[orgId];
+              if (ov && ov.organization) return ov.organization;
+              return orgId;
+            };
+
+            const getSpName = (spId) => {
+              const sp = salespeople.find(s => s.id === spId);
+              return sp ? sp.emoji + ' ' + sp.name : spId;
+            };
+
+            const stats = {
+              interest:    todayIx.filter(i => i.status === 'interest').length,
+              no_interest: todayIx.filter(i => i.status === 'no_interest').length,
+              postponed:   todayIx.filter(i => i.status === 'postponed').length,
+              emailed:     todayIx.filter(i => i.status === 'emailed').length,
+              termin:      todayIx.filter(i => i.status === 'termin').length,
+              no_contact:  todayIx.filter(i => i.status === 'no_contact').length,
+            };
+            const total = Object.values(stats).reduce((a, b) => a + b, 0);
+
+            const dateLabel = new Date().toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            let msg = '📊 *Denní souhrn CRM*\n';
+            msg += '📅 ' + dateLabel + '\n';
+            msg += '━━━━━━━━━━━━━━━\n\n';
+
+            if (total === 0) {
+              msg += 'Dnes nebyly zaznamenány žádné aktivity.\n';
+            } else {
+              msg += '*Celkem aktivit dnes: ' + total + '*\n';
+              if (stats.interest > 0)    msg += '✅ Zájem: *' + stats.interest + '*\n';
+              if (stats.termin > 0)      msg += '📅 Termín: *' + stats.termin + '*\n';
+              if (stats.postponed > 0)   msg += '⏳ Odloženo: *' + stats.postponed + '*\n';
+              if (stats.emailed > 0)     msg += '📧 Email: *' + stats.emailed + '*\n';
+              if (stats.no_interest > 0) msg += '❌ Nezájem: *' + stats.no_interest + '*\n';
+              if (stats.no_contact > 0)  msg += '🚫 Nekontaktovat: *' + stats.no_contact + '*\n';
+
+              // Zájem – názvy organizací
+              const zajmy = todayIx.filter(i => i.status === 'interest');
+              if (zajmy.length > 0) {
+                msg += '\n✅ *Zájem – organizace:*\n';
+                zajmy.forEach(i => {
+                  msg += '  • ' + getOrgName(i.orgId) + '\n';
+                  msg += '    └ ' + getSpName(i.spId) + '\n';
+                });
+              }
+
+              // Termín – názvy organizací
+              const terminy = todayIx.filter(i => i.status === 'termin');
+              if (terminy.length > 0) {
+                msg += '\n📅 *Termín – organizace:*\n';
+                terminy.forEach(i => {
+                  msg += '  • ' + getOrgName(i.orgId) + '\n';
+                  msg += '    └ ' + getSpName(i.spId) + '\n';
+                });
+              }
+
+              // Per obchodník – všechny aktivity s názvy org
+              msg += '\n━━━━━━━━━━━━━━━\n';
+              msg += '*Aktivity per obchodník:*\n\n';
+
+              const spIds = [...new Set(todayIx.map(i => i.spId))];
+              spIds.forEach(spId => {
+                const spIx = todayIx.filter(i => i.spId === spId);
+                const spName = getSpName(spId);
+                const c = {
+                  interest:    spIx.filter(i => i.status === 'interest').length,
+                  termin:      spIx.filter(i => i.status === 'termin').length,
+                  postponed:   spIx.filter(i => i.status === 'postponed').length,
+                  emailed:     spIx.filter(i => i.status === 'emailed').length,
+                  no_interest: spIx.filter(i => i.status === 'no_interest').length,
+                  no_contact:  spIx.filter(i => i.status === 'no_contact').length,
+                };
+                const parts = [];
+                if (c.interest > 0)    parts.push('✅' + c.interest);
+                if (c.termin > 0)      parts.push('📅' + c.termin);
+                if (c.postponed > 0)   parts.push('⏳' + c.postponed);
+                if (c.emailed > 0)     parts.push('📧' + c.emailed);
+                if (c.no_interest > 0) parts.push('❌' + c.no_interest);
+                if (c.no_contact > 0)  parts.push('🚫' + c.no_contact);
+
+                msg += '*' + spName + '*  ' + parts.join(' ') + '\n';
+                spIx.forEach(i => {
+                  const icon = { interest:'✅', no_interest:'❌', postponed:'⏳', emailed:'📧', termin:'📅', no_contact:'🚫' }[i.status] || '•';
+                  msg += '  ' + icon + ' ' + getOrgName(i.orgId) + '\n';
+                });
+                msg += '\n';
+              });
+            }
+
+            const overdue = tasks.filter(t => !t.done && t.date && t.date < today);
+            if (overdue.length > 0) msg += '⚠️ *Propadlé úkoly: ' + overdue.length + '*\n';
+
+            msg += '━━━━━━━━━━━━━━━\n🔗 crm-pecka-obchod';
+
+            // Rozdělení pokud je zpráva delší než 4000 znaků
+            let remaining = msg;
+            while (remaining.length > 0) {
+              const chunk = remaining.slice(0, 4000);
+              remaining = remaining.slice(4000);
+              await httpsPost('https://api.telegram.org/bot' + TELEGRAM_BOT + '/sendMessage', {
+                chat_id: TELEGRAM_CHAT, text: chunk, parse_mode: 'Markdown'
+              });
+            }
+
+            console.log('Souhrn odeslán OK');
+          }
+
+          main().catch(e => { console.error(e); process.exit(1); });
+          EOF
