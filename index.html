@@ -19,6 +19,18 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 .screen{flex:1;display:flex;flex-direction:column;animation:fadeUp .28s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .topbar{background:var(--ink);color:#fff;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300}
+.topbar-search{position:relative;display:flex;align-items:center}
+.topbar-search-inp{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;padding:6px 12px 6px 30px;border-radius:8px;font-family:'Sora',sans-serif;font-size:12px;width:220px;outline:none;transition:.2s}
+.topbar-search-inp::placeholder{color:rgba(255,255,255,.45)}
+.topbar-search-inp:focus{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);width:270px}
+.topbar-search-icon{position:absolute;left:9px;font-size:12px;pointer-events:none;opacity:.55}
+.topbar-search-result{position:absolute;top:calc(100% + 8px);left:0;min-width:320px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:999;overflow:hidden}
+.tsr-item{padding:10px 14px;border-bottom:1px solid var(--border)}
+.tsr-item:last-child{border-bottom:none}
+.tsr-org{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.tsr-free{font-size:11px;color:var(--muted)}
+.tsr-badge-owned{background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.tsr-badge-free{background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
 .topbar-brand{font-size:14px;font-weight:700;letter-spacing:.05em;display:flex;align-items:center;gap:9px;cursor:pointer}
 .pill{background:var(--green);color:#fff;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.07em}
 .btn-nav{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);padding:6px 12px;border-radius:8px;font-family:'Sora',sans-serif;font-size:12px;cursor:pointer;transition:.15s}
@@ -6577,6 +6589,7 @@ function CRM() {
     <div className="crm">
       <div className="topbar">
         <div className="topbar-brand" onClick={()=>go("home")}>◆ CRM Systém <span className="pill">OBCHOD</span></div>
+        <GlobalSearch salespeople={salespeople} customOrgs={customOrgs} orgOverrides={orgOverrides}/>
         <div style={{display:"flex",gap:6,alignItems:"center"}}>
           <button className={`btn-nav ${view==="home"?"active":""}`} onClick={()=>go("home")}>← Domů</button>
           {managerAuthed
@@ -6591,6 +6604,60 @@ function CRM() {
       {showAddSp&&<AddSpModal onAdd={addSP} onClose={()=>setShowAddSp(false)}/>}
     </div>
   </>);
+}
+
+function GlobalSearch({salespeople,customOrgs,orgOverrides}){
+  const [q,setQ]=useState("")
+  const [open,setOpen]=useState(false)
+  const ref=useRef(null)
+
+  useEffect(()=>{
+    const handler=e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false)}
+    document.addEventListener("mousedown",handler)
+    return()=>document.removeEventListener("mousedown",handler)
+  },[])
+
+  const results=useMemo(()=>{
+    if(q.trim().length<2)return[]
+    const ql=q.toLowerCase()
+    const allOrgs=[
+      ...customOrgs.map(o=>({...o,_src:"custom"})),
+      ...ALL_ORGS_DB.map(o=>{const ov=orgOverrides[o.id];return ov?{...o,...ov,_src:"db"}:{...o,_src:"db"}})
+    ]
+    return allOrgs.filter(o=>o.organization.toLowerCase().includes(ql)||(o.contact||"").toLowerCase().includes(ql)).slice(0,6).map(o=>{
+      const owner=salespeople.find(s=>s.id===o.addedBy||s.id===o.assignedTo)
+      return{...o,owner}
+    })
+  },[q,customOrgs,orgOverrides,salespeople])
+
+  return(
+    <div ref={ref} className="topbar-search">
+      <span className="topbar-search-icon">&#128269;</span>
+      <input
+        className="topbar-search-inp"
+        placeholder="Hledat organizaci…"
+        value={q}
+        onChange={e=>{setQ(e.target.value);setOpen(true)}}
+        onFocus={()=>setOpen(true)}
+      />
+      {open&&q.length>=2&&(
+        <div className="topbar-search-result">
+          {results.length===0&&<div className="tsr-item"><div className="tsr-free">Nenalezeno — organizace je pravděpodobně volná</div></div>}
+          {results.map(o=>(
+            <div key={o.id} className="tsr-item">
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
+                <div className="tsr-org">{o.organization}</div>
+                {o.owner
+                  ?<span className="tsr-badge-owned">✓ {o.owner.emoji} {o.owner.name}</span>
+                  :<span className="tsr-badge-free">Volná</span>}
+              </div>
+              {o.contact&&<div className="tsr-free">{o.contact}{o.type&&<span style={{marginLeft:6,opacity:.7}}>{o.type}</span>}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 function HomeScreen({salespeople,go,managerAuthed,spPending,hasReq,overdueCount,onAddSp}){
