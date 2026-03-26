@@ -6696,10 +6696,48 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
     }
   }
 
+  const [dupWarning,setDupWarning] = useState("")
+  const [dupSimilar,setDupSimilar] = useState([])
+
+  const getOrgOwner = (org) => {
+    const spId = org.addedBy || org.assignedTo
+    if (!spId) return null
+    return salespeople.find(s => s.id === spId)
+  }
+
+  const checkDuplicates = (name) => {
+    if (!name.trim()) { setDupWarning(""); setDupSimilar([]); return; }
+    const nameLower = name.trim().toLowerCase()
+    const allOrgs = [...customOrgs, ...allAsgn]
+    const exact = allOrgs.find(o => o.organization.toLowerCase() === nameLower)
+    if (exact) {
+      setDupWarning("exact")
+      setDupSimilar([{...exact, owner: getOrgOwner(exact)}])
+      return
+    }
+    const nameWords = nameLower.split(/\s+/).filter(w => w.length > 3)
+    const similar = allOrgs.filter(o => {
+      const oLower = o.organization.toLowerCase()
+      if (oLower.includes(nameLower) || nameLower.includes(oLower)) return true
+      const oWords = oLower.split(/\s+/).filter(w => w.length > 3)
+      const overlap = nameWords.filter(w => oWords.some(ow => ow.includes(w) || w.includes(ow)))
+      return overlap.length >= Math.min(2, nameWords.length) && nameWords.length > 0
+    }).slice(0, 3).map(o => ({...o, owner: getOrgOwner(o)}))
+    if (similar.length > 0) {
+      setDupWarning("similar"); setDupSimilar(similar)
+    } else {
+      setDupWarning(""); setDupSimilar([])
+    }
+  }
+
   const addOrg=()=>{
     if(!addForm.organization.trim())return
+    const nameLower = addForm.organization.trim().toLowerCase()
+    const allOrgs = [...customOrgs, ...allAsgn]
+    if (allOrgs.find(o => o.organization.toLowerCase() === nameLower)) return
     setCustomOrgs(db=>[...db,{id:"u"+uid(),...addForm,kraj:"",okres:"",population:0,assignedTo:sp.id,addedBy:sp.id}])
     setAddForm({organization:"",contact:"",phone:"",email:"",type:"",web:""})
+    setDupWarning(""); setDupSimilar([])
   }
   const deleteOrg=id=>{
     setCustomOrgs(db=>db.filter(o=>o.id!==id))
@@ -6966,7 +7004,33 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
       <div>
         <div className="sec-hd">➕ Přidat organizaci</div>
         <div className="add-form">
-          <input className="inp" placeholder="Název *" value={addForm.organization} onChange={e=>setAddForm(f=>({...f,organization:e.target.value}))}/>
+          <input className="inp" placeholder="Název *" value={addForm.organization} onChange={e=>{setAddForm(f=>({...f,organization:e.target.value}));checkDuplicates(e.target.value);}}/>
+          {dupWarning==="exact"&&<div style={{background:"#FEE2E2",border:"1.5px solid #FECACA",borderRadius:8,padding:"8px 11px",fontSize:11,color:"#DC2626"}}>
+            <div style={{fontWeight:700,marginBottom:4}}>❌ Tato organizace už existuje!</div>
+            <div style={{fontWeight:600}}>{dupSimilar[0]?.organization}</div>
+            {dupSimilar[0]?.owner
+              ? <div style={{marginTop:4,display:"flex",alignItems:"center",gap:5}}>
+                  <span style={{fontSize:14}}>{dupSimilar[0].owner.emoji}</span>
+                  <span>Patří: <b>{dupSimilar[0].owner.name}</b></span>
+                </div>
+              : <div style={{marginTop:4,color:"#9E9A93"}}>Vlastník: nepřiřazeno</div>
+            }
+            <div style={{marginTop:4,fontWeight:400}}>Nelze přidat duplicitu — domluv se s kolegou.</div>
+          </div>}
+          {dupWarning==="similar"&&<div style={{background:"#FEF3C7",border:"1.5px solid #FCD34D",borderRadius:8,padding:"8px 11px",fontSize:11,color:"#92400E"}}>
+            <div style={{fontWeight:700,marginBottom:6}}>⚠️ Podobná organizace možná existuje:</div>
+            {dupSimilar.map(o=><div key={o.id} style={{marginBottom:6,paddingBottom:6,borderBottom:"1px solid #FDE68A"}}>
+              <div style={{fontWeight:600}}>→ {o.organization}</div>
+              {o.owner
+                ? <div style={{display:"flex",alignItems:"center",gap:5,marginTop:2}}>
+                    <span style={{fontSize:13}}>{o.owner.emoji}</span>
+                    <span>Patří: <b>{o.owner.name}</b></span>
+                  </div>
+                : <div style={{color:"#B45309",marginTop:2}}>Vlastník: nepřiřazeno</div>
+              }
+            </div>)}
+            <div style={{fontWeight:400}}>Zkontroluj jestli nejde o tu samou organizaci a domluv se s kolegou.</div>
+          </div>}
           <input className="inp" placeholder="Kontaktní osoba" value={addForm.contact} onChange={e=>setAddForm(f=>({...f,contact:e.target.value}))}/>
           <div className="row2">
             <input className="inp" placeholder="Telefon" value={addForm.phone} onChange={e=>setAddForm(f=>({...f,phone:e.target.value}))}/>
