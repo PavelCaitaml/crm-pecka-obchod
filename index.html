@@ -7052,14 +7052,16 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
     const curTab     = getOrgTabActive(org.id)
     const isAsgn     = allAsgn.some(a=>a.id===org.id)
     const isCustom   = customOrgs.some(o=>o.id===org.id)
-
     return(<div key={org.id} className="org-card">
       <div className="org-head" onClick={()=>setExpOrg(isExp?null:org.id)}>
         <div style={{flex:1}}>
           <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
             <div className="org-org">{org.organization}</div>
             <span className={`tag-type ${isObec?"tag-obec":""}`}>{org.type}</span>
-            {sm&&<span className="sbadge" style={{background:sm.bg,color:sm.color}}>{sm.icon} {sm.label}</span>}{csLabel&&<span className={`sbadge ${csCls}`}>{csLabel}</span>}
+            {sm&&<span className="sbadge" style={{background:sm.bg,color:sm.color}}>{sm.icon} {sm.label}</span>}
+            {callStatuses[org.id]==="volano"&&<span className="sbadge s-volano">📞 Voláno</span>}
+            {callStatuses[org.id]==="nedovolano"&&<span className="sbadge s-nedovol">📵 Nedovoláno</span>}
+            {callStatuses[org.id]==="cekame"&&<span className="sbadge s-cekame">⏳ Čeká zpětná vazba</span>}
           </div>
           <div className="org-meta">
             {org.contact&&<span>👤 {org.contact}</span>}
