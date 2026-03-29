@@ -236,6 +236,28 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 .vl-info{font-size:10px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
 .pagination{display:flex;gap:5px;margin-top:8px;align-items:center;justify-content:center}
 .section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--sh)}
+.cal-wrap{display:flex;flex-direction:column;gap:14px}
+.cal-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cal-date-inp{padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;outline:none;background:var(--bg);transition:.15s;cursor:pointer}
+.cal-date-inp:focus{border-color:var(--green)}
+.cal-nav{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;transition:.15s}
+.cal-nav:hover{border-color:var(--ink)}
+.cal-day-label{font-size:13px;font-weight:700;color:var(--ink)}
+.cal-kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.cal-sp-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:var(--sh)}
+.cal-sp-name{font-size:13px;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.cal-org-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);font-size:11px}
+.cal-org-row:last-child{border:none}
+.cal-empty{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+.cal-day-btn{padding:5px 4px;border:1.5px solid var(--border);border-radius:7px;font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;background:var(--card);text-align:center;transition:.15s;min-height:44px}
+.cal-day-btn:hover{border-color:var(--green)}
+.cal-day-btn.active{border-color:var(--green);background:#DCFCE7}
+.cal-day-btn.has-data{border-color:#93C5FD;background:#EFF6FF}
+.cal-day-btn.active.has-data{border-color:var(--green);background:#DCFCE7}
+.cal-day-btn.today-d{font-weight:700}
+.cal-day-num{font-size:12px;font-weight:600}
+.cal-day-dot{font-size:9px;color:var(--muted);margin-top:2px}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
@@ -7173,7 +7195,7 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
     </div>}
 
     <div className="mgr-tabs">
-      {[["report","📊 Report"],["assign","📋 Přiřadit"],["trainings","📅 Školení"],["pipeline","🔭 Pipeline"]].map(([k,l])=>(
+      {[["report","📊 Report"],["kalendar","📆 Kalendář"],["assign","📋 Přiřadit"],["trainings","📅 Školení"],["pipeline","🔭 Pipeline"]].map(([k,l])=>(
         <button key={k} className={`tab-btn ${tab===k?"active":""}`} onClick={()=>setTab(k)}>{l}</button>
       ))}
     </div>
@@ -7205,7 +7227,9 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
       </div>
     </>}
 
-    {tab==="assign"&&<AssignTab salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAssigned={setOrgAssigned}/>}
+    {tab==="kalendar"&&<CalendarTab salespeople={salespeople} customOrgs={customOrgs} interactions={interactions}/>}
+
+        {tab==="assign"&&<AssignTab salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAssigned={setOrgAssigned}/>}
 
     {tab==="trainings"&&<div style={{display:"flex",flexDirection:"column",gap:8}}>
       <div style={{fontWeight:700,fontSize:14}}>Školení dle organizace</div>
@@ -7253,6 +7277,138 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
       </div>
     </div>}
   </div></div>)
+}
+
+function CalendarTab({salespeople,customOrgs,interactions}){
+  const [selDate,setSelDate]=useState(todayStr())
+  const [viewMonth,setViewMonth]=useState(()=>{const d=new Date();return{y:d.getFullYear(),m:d.getMonth()}})
+
+  // Dny v měsíci pro mini kalendář
+  const daysInMonth=useMemo(()=>{
+    const {y,m}=viewMonth
+    const first=new Date(y,m,1)
+    const last=new Date(y,m+1,0)
+    const days=[]
+    // prázdné buňky před prvním dnem (pondělí=0)
+    let startDay=(first.getDay()+6)%7
+    for(let i=0;i<startDay;i++)days.push(null)
+    for(let d=1;d<=last.getDate();d++){
+      const dateStr=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+      const hasData=interactions.some(i=>i.date===dateStr)
+      days.push({d,dateStr,hasData})
+    }
+    return days
+  },[viewMonth,interactions])
+
+  const monthLabel=new Date(viewMonth.y,viewMonth.m,1).toLocaleDateString('cs-CZ',{month:'long',year:'numeric'})
+  const prevMonth=()=>setViewMonth(({y,m})=>m===0?{y:y-1,m:11}:{y,m:m-1})
+  const nextMonth=()=>setViewMonth(({y,m})=>m===11?{y:y+1,m:0}:{y,m:m+1})
+
+  const dayIx=interactions.filter(i=>i.date===selDate)
+  const today=todayStr()
+
+  const dayLabel=new Date(selDate+'T12:00:00').toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'})
+
+  const stats={
+    interest:   dayIx.filter(i=>i.status==='interest').length,
+    no_interest:dayIx.filter(i=>i.status==='no_interest').length,
+    postponed:  dayIx.filter(i=>i.status==='postponed').length,
+    emailed:    dayIx.filter(i=>i.status==='emailed').length,
+    termin:     dayIx.filter(i=>i.status==='termin').length,
+    no_contact: dayIx.filter(i=>i.status==='no_contact').length,
+  }
+  const total=Object.values(stats).reduce((a,b)=>a+b,0)
+
+  const activeSps=salespeople.filter(sp=>dayIx.some(i=>i.spId===sp.id))
+  const inactiveSps=salespeople.filter(sp=>!dayIx.some(i=>i.spId===sp.id))
+
+  const getOrgName=id=>[...customOrgs,...ALL_ORGS_DB].find(o=>o.id===id)?.organization||id
+
+  return(<div className="cal-wrap">
+    {/* Mini kalendář */}
+    <div className="section-card">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
+        <button className="cal-nav" onClick={prevMonth}>←</button>
+        <div style={{fontWeight:700,fontSize:13,textTransform:'capitalize'}}>{monthLabel}</div>
+        <button className="cal-nav" onClick={nextMonth}>→</button>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:3,marginBottom:5}}>
+        {['Po','Út','St','Čt','Pá','So','Ne'].map(d=><div key={d} style={{textAlign:'center',fontSize:9,fontWeight:700,color:'var(--muted)',padding:'2px 0'}}>{d}</div>)}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:3}}>
+        {daysInMonth.map((day,idx)=>day===null
+          ?<div key={'e'+idx}/>
+          :<div key={day.dateStr}
+            className={`cal-day-btn ${day.hasData?'has-data':''} ${day.dateStr===selDate?'active':''} ${day.dateStr===today?'today-d':''}`}
+            onClick={()=>setSelDate(day.dateStr)}>
+            <div className="cal-day-num">{day.d}</div>
+            {day.hasData&&<div className="cal-day-dot">●</div>}
+          </div>
+        )}
+      </div>
+      <div style={{marginTop:8,fontSize:10,color:'var(--muted)',display:'flex',gap:12}}>
+        <span><span style={{color:'#3B82F6'}}>●</span> Má aktivity</span>
+        <span><span style={{color:'var(--green)'}}>●</span> Vybraný den</span>
+      </div>
+    </div>
+
+    {/* Report zvoleného dne */}
+    <div>
+      <div className="cal-day-label" style={{marginBottom:10}}>
+        📅 {dayLabel} {selDate===today&&<span style={{background:'var(--green)',color:'#fff',fontSize:10,padding:'2px 8px',borderRadius:20,marginLeft:6,fontWeight:600}}>DNES</span>}
+      </div>
+
+      {total===0
+        ?<div className="cal-empty">
+            <div style={{fontSize:32,marginBottom:8}}>😴</div>
+            Tento den nebyly zaznamenány žádné aktivity.
+          </div>
+        :<>
+          {/* KPI */}
+          <div className="cal-kpi-row" style={{marginBottom:14}}>
+            {[[stats.interest,'#16A34A','✅ Zájem'],[stats.termin,'#7C3AED','📅 Termín'],[stats.postponed,'#D97706','⏳ Odloženo'],[stats.emailed,'#2563EB','📧 Email'],[stats.no_interest,'#DC2626','❌ Nezájem'],[stats.no_contact,'#6B7280','🚫 Nekontakt']].map(([v,c,l])=>v>0&&(
+              <div key={l} className="kpi-card"><div className="kpi-val" style={{color:c}}>{v}</div><div className="kpi-lbl">{l}</div></div>
+            ))}
+          </div>
+
+          {/* Aktivní obchodníci */}
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>
+            {activeSps.map(sp=>{
+              const spIx=dayIx.filter(i=>i.spId===sp.id)
+              return(<div key={sp.id} className="cal-sp-card">
+                <div className="cal-sp-name">
+                  <span style={{fontSize:18}}>{sp.emoji}</span>{sp.name}
+                  <div style={{marginLeft:'auto',display:'flex',gap:4}}>
+                    {spIx.filter(i=>i.status==='interest').length>0&&<span className="stat-chip" style={{background:'#DCFCE7',color:'#16A34A',fontSize:10,padding:'2px 7px',borderRadius:20}}>✅{spIx.filter(i=>i.status==='interest').length}</span>}
+                    {spIx.filter(i=>i.status==='termin').length>0&&<span className="stat-chip" style={{background:'#EDE9FE',color:'#7C3AED',fontSize:10,padding:'2px 7px',borderRadius:20}}>📅{spIx.filter(i=>i.status==='termin').length}</span>}
+                    {spIx.filter(i=>i.status==='postponed').length>0&&<span className="stat-chip" style={{background:'#FEF3C7',color:'#D97706',fontSize:10,padding:'2px 7px',borderRadius:20}}>⏳{spIx.filter(i=>i.status==='postponed').length}</span>}
+                    {spIx.filter(i=>i.status==='emailed').length>0&&<span className="stat-chip" style={{background:'#DBEAFE',color:'#2563EB',fontSize:10,padding:'2px 7px',borderRadius:20}}>📧{spIx.filter(i=>i.status==='emailed').length}</span>}
+                    {spIx.filter(i=>i.status==='no_interest').length>0&&<span className="stat-chip" style={{background:'#FEE2E2',color:'#DC2626',fontSize:10,padding:'2px 7px',borderRadius:20}}>❌{spIx.filter(i=>i.status==='no_interest').length}</span>}
+                  </div>
+                </div>
+                <div>
+                  {spIx.map(i=>{const sm=STATUS_META[i.status];return(
+                    <div key={i.id} className="cal-org-row">
+                      <span style={{fontSize:13}}>{sm?.icon}</span>
+                      <span style={{flex:1,fontWeight:600}}>{getOrgName(i.orgId)}</span>
+                      <span style={{color:sm?.color,fontSize:10,fontWeight:600}}>{sm?.label}</span>
+                    </div>
+                  )})}
+                </div>
+              </div>)
+            })}
+          </div>
+
+          {/* Nepracující */}
+          {inactiveSps.length>0&&<div style={{marginTop:10,padding:'10px 14px',background:'var(--bg)',borderRadius:10,border:'1px solid var(--border)'}}>
+            <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',marginBottom:6}}>😴 NEPRACOVAL/A TENTO DEN</div>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+              {inactiveSps.map(sp=><span key={sp.id} style={{fontSize:12,background:'var(--card)',border:'1px solid var(--border)',borderRadius:20,padding:'3px 10px'}}>{sp.emoji} {sp.name}</span>)}
+            </div>
+          </div>}
+        </>}
+    </div>
+  </div>)
 }
 
 const PAGE_SIZE=50
