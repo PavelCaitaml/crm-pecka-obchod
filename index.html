@@ -19,18 +19,6 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 .screen{flex:1;display:flex;flex-direction:column;animation:fadeUp .28s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .topbar{background:var(--ink);color:#fff;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300}
-.topbar-search{position:relative;display:flex;align-items:center}
-.topbar-search-inp{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;padding:6px 12px 6px 30px;border-radius:8px;font-family:'Sora',sans-serif;font-size:12px;width:220px;outline:none;transition:.2s}
-.topbar-search-inp::placeholder{color:rgba(255,255,255,.45)}
-.topbar-search-inp:focus{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);width:270px}
-.topbar-search-icon{position:absolute;left:9px;font-size:12px;pointer-events:none;opacity:.55}
-.topbar-search-result{position:absolute;top:calc(100% + 8px);left:0;min-width:320px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:999;overflow:hidden}
-.tsr-item{padding:10px 14px;border-bottom:1px solid var(--border)}
-.tsr-item:last-child{border-bottom:none}
-.tsr-org{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
-.tsr-free{font-size:11px;color:var(--muted)}
-.tsr-badge-owned{background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.tsr-badge-free{background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
 .topbar-brand{font-size:14px;font-weight:700;letter-spacing:.05em;display:flex;align-items:center;gap:9px;cursor:pointer}
 .pill{background:var(--green);color:#fff;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.07em}
 .btn-nav{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);padding:6px 12px;border-radius:8px;font-family:'Sora',sans-serif;font-size:12px;cursor:pointer;transition:.15s}
@@ -141,10 +129,6 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 .s-email{background:#DBEAFE!important;border-color:var(--blue)!important;color:var(--blue)!important}
 .s-nokontakt{background:#F3F4F6!important;border-color:#6B7280!important;color:#374151!important}
 .s-termin{background:#EDE9FE!important;border-color:var(--purple)!important;color:var(--purple)!important}
-.s-volano{background:#DCFCE7!important;border-color:#16A34A!important;color:#15803D!important}
-.s-nedovol{background:#FEE2E2!important;border-color:var(--red)!important;color:var(--red)!important}
-.s-cekame{background:#FEF3C7!important;border-color:var(--amber)!important;color:#92400E!important}
-.call-status-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 
 /* TRAINING */
 .train-box{margin-top:10px}
@@ -171,11 +155,6 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 .task-date.overdue{color:var(--red);font-weight:600}
 
 /* NOTIFICATIONS */
-.motiv-banner{background:#D97706;border-radius:14px;padding:14px 16px;margin-bottom:4px;position:relative;overflow:hidden}
-.motiv-banner::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,.04);border-radius:50%}
-.motiv-text{font-size:13px;font-weight:700;color:#fff;line-height:1.5;margin-bottom:4px}
-.motiv-sub{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.05em}
-.motiv-loading{font-size:12px;color:rgba(255,255,255,.5);font-style:italic}
 .notif-banner{background:#FEF3C7;border:1.5px solid #FCD34D;border-radius:12px;padding:12px 16px;margin-bottom:4px}
 .notif-banner-title{font-size:12px;font-weight:700;color:#92400E;margin-bottom:6px}
 .notif-item{font-size:11px;color:#92400E;padding:3px 0;border-bottom:1px solid #FDE68A;display:flex;align-items:center;gap:6px}
@@ -245,63 +224,24 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
 .vl-info{font-size:10px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
 .pagination{display:flex;gap:5px;margin-top:8px;align-items:center;justify-content:center}
 .section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--sh)}
-.zebricek-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;box-shadow:var(--sh);margin-bottom:28px}
-.zebricek-title{font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.zebricek-period{display:flex;gap:6px;margin-bottom:14px}
-.zp-btn{padding:4px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:11px;cursor:pointer;background:var(--bg);font-family:'Sora',sans-serif;font-weight:600;transition:.15s}
-.zp-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.rank-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
-.rank-row:last-child{border:none}
-.rank-pos{font-size:16px;width:26px;text-align:center;flex-shrink:0}
-.rank-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.rank-name{font-size:13px;font-weight:600;flex:1;color:var(--ink)}
-.rank-bar-bg{height:5px;background:var(--bg);border-radius:3px;margin-top:3px}
-.rank-bar-fill{height:5px;border-radius:3px;transition:width .6s ease}
-.goal-setup-card{background:var(--ink);border-radius:14px;padding:16px;margin-bottom:12px}
-.goal-setup-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:12px}
-.goal-inp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.goal-inp-label{font-size:12px;color:rgba(255,255,255,.6);flex:1}
-.goal-inp-field{width:70px;padding:6px 10px;border:1px solid rgba(255,255,255,.2);border-radius:8px;font-family:'Sora',sans-serif;font-size:14px;font-weight:600;text-align:center;outline:none;background:rgba(255,255,255,.12);color:#fff}
-.goal-start-btn{width:100%;padding:10px;background:#fff;color:var(--ink);border:none;border-radius:10px;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
-.goal-progress-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
-.gp-item{margin-bottom:12px}
-.gp-item:last-child{margin-bottom:0}
-.gp-header{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
-.gp-bar-bg{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
-.gp-bar-fill{height:8px;border-radius:4px;transition:width .4s ease}
-.gp-pct{font-size:10px;font-weight:600;margin-top:3px}
-.medal-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:flex;align-items:center;justify-content:center}
-.medal-box{background:var(--ink);border-radius:20px;padding:32px 28px;text-align:center;max-width:300px;width:90%}
-.medal-emoji{font-size:72px;display:block;margin-bottom:12px;animation:mBounce .5s ease infinite alternate}
-.medal-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px}
-.medal-sub{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px}
-.medal-close-btn{padding:10px 24px;background:#fff;color:var(--ink);border:none;border-radius:20px;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
-.cf-row{display:flex;justify-content:center;gap:4px;margin-bottom:16px}
-.cf-dot{width:8px;height:8px;border-radius:2px;animation:cfFall .7s linear infinite}
-@keyframes mBounce{from{transform:scale(1) rotate(-8deg)}to{transform:scale(1.2) rotate(8deg)}}
-@keyframes cfFall{0%{transform:translateY(-6px) rotate(0);opacity:1}100%{transform:translateY(6px) rotate(180deg);opacity:0}}
-.cal-wrap{display:flex;flex-direction:column;gap:14px}
-.cal-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.cal-date-inp{padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;outline:none;background:var(--bg);transition:.15s;cursor:pointer}
-.cal-date-inp:focus{border-color:var(--green)}
-.cal-nav{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;transition:.15s}
-.cal-nav:hover{border-color:var(--ink)}
-.cal-day-label{font-size:13px;font-weight:700;color:var(--ink)}
-.cal-kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-.cal-sp-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:var(--sh)}
-.cal-sp-name{font-size:13px;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:6px}
-.cal-org-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);font-size:11px}
-.cal-org-row:last-child{border:none}
-.cal-empty{text-align:center;padding:30px;color:var(--muted);font-size:13px}
-.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
-.cal-day-btn{padding:5px 4px;border:1.5px solid var(--border);border-radius:7px;font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;background:var(--card);text-align:center;transition:.15s;min-height:44px}
-.cal-day-btn:hover{border-color:var(--green)}
-.cal-day-btn.active{border-color:var(--green);background:#DCFCE7}
-.cal-day-btn.has-data{border-color:#93C5FD;background:#EFF6FF}
-.cal-day-btn.active.has-data{border-color:var(--green);background:#DCFCE7}
-.cal-day-btn.today-d{font-weight:700}
-.cal-day-num{font-size:12px;font-weight:600}
-.cal-day-dot{font-size:9px;color:var(--muted);margin-top:2px}
+.main-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:14px}
+.main-tab{padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;color:var(--muted);transition:.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:'Sora',sans-serif;margin-bottom:-2px}
+.main-tab.active{border-bottom-color:var(--green);color:var(--ink)}
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cat-tab{padding:5px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;background:var(--card);transition:.15s}
+.cat-tab:hover{border-color:var(--ink)}
+.cat-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search-bar-wrap{position:relative;margin-bottom:12px}
+.search-bar-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}
+.search-bar-input{width:100%;padding:10px 12px 10px 36px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sora',sans-serif;font-size:13px;outline:none;background:var(--card);transition:.15s}
+.search-bar-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.12)}
+.search-result{background:var(--card);border:1.5px solid var(--green);border-radius:12px;padding:14px;margin-bottom:8px;box-shadow:var(--sh);animation:fadeUp .2s ease}
+.task-section{margin-bottom:18px}
+.task-section-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:8px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.task-section-overdue{background:#FEF2F2;color:#DC2626}
+.task-section-today{background:#FEF3C7;color:#92400E}
+.task-section-future{background:#EFF6FF;color:#1D4ED8}
+.task-section-done{background:#F3F4F6;color:#6B7280}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
@@ -317,31 +257,29 @@ body,html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink)}
     import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
     window.fbApp = { initializeApp };
     window.fbStore = { getFirestore, doc, setDoc, onSnapshot };
-    window.dispatchEvent(new Event('fb-ready'));
+    // Small delay to ensure Babel script has processed
+    setTimeout(() => window.dispatchEvent(new Event('fb-ready')), 100);
   </script>
   <script type="text/babel" data-presets="react">
 const { useState, useMemo, useCallback, useEffect, useRef } = React;
 
 
 // ─── FIREBASE ────────────────────────────────────────────────────────────────
-// Firebase se inicializuje až v init(), aby nedošlo k race condition s ES modulem
-function initFirebase() {
-  if (window._db) return; // již inicializováno
-  const { initializeApp } = window.fbApp;
-  const { getFirestore, doc, setDoc, onSnapshot } = window.fbStore;
-  const fbInstance = initializeApp({
-    apiKey: "AIzaSyD7vvJXGvAdfhFU5a_biqS3eOiLle2zk3Y",
-    authDomain: "crm-obchod1.firebaseapp.com",
-    projectId: "crm-obchod1",
-    storageBucket: "crm-obchod1.firebasestorage.app",
-    messagingSenderId: "195690446189",
-    appId: "1:195690446189:web:ae8a33e9d916fd967cee64"
-  });
-  window._db = getFirestore(fbInstance);
-  window._fbDoc = doc;
-  window._fbSetDoc = setDoc;
-  window._fbOnSnapshot = onSnapshot;
-}
+const { initializeApp } = window.fbApp;
+const { getFirestore, doc, setDoc, onSnapshot } = window.fbStore;
+
+const fbInstance = initializeApp({
+  apiKey: "AIzaSyD7vvJXGvAdfhFU5a_biqS3eOiLle2zk3Y",
+  authDomain: "crm-obchod1.firebaseapp.com",
+  projectId: "crm-obchod1",
+  storageBucket: "crm-obchod1.firebasestorage.app",
+  messagingSenderId: "195690446189",
+  appId: "1:195690446189:web:ae8a33e9d916fd967cee64"
+});
+window._db = getFirestore(fbInstance);
+window._fbDoc = doc;
+window._fbSetDoc = setDoc;
+window._fbOnSnapshot = onSnapshot;
 
 // ─── TELEGRAM NOTIFIKACE ─────────────────────────────────────────────────────
 async function sendTelegramNotification(orgName, spName, status) {
@@ -383,6 +321,11 @@ const INIT_SP = [
 const ORG_TYPES = ["ZŠ","SŠ","MŠ","MŠ+ZŠ","ZŠ+SŠ","Obec","Ostatní"]
 const ALL_KRAJE = ["Hlavní město Praha", "Jihomoravský kraj", "Jihočeský kraj", "Karlovarský kraj", "Kraj Vysočina", "Královéhradecký kraj", "Liberecký kraj", "Moravskoslezský kraj", "Olomoucký kraj", "Pardubický kraj", "Plzeňský kraj", "Středočeský kraj", "Zlínský kraj", "Ústecký kraj"]
 const ALL_OKRESY = ["Benešov", "Beroun", "Blansko", "Brno-město", "Brno-venkov", "Bruntál", "Břeclav", "Cheb", "Chomutov", "Chrudim", "Domažlice", "Děčín", "Frýdek-Místek", "Havlíčkův Brod", "Hodonín", "Hradec Králové", "Jablonec nad Nisou", "Jeseník", "Jihlava", "Jindřichův Hradec", "Jičín", "Karlovy Vary", "Karviná", "Kladno", "Klatovy", "Kolín", "Kroměříž", "Kutná Hora", "Liberec", "Litoměřice", "Louny", "Mladá Boleslav", "Most", "Mělník", "Nový Jičín", "Nymburk", "Náchod", "Olomouc", "Opava", "Ostrava-město", "Pardubice", "Pelhřimov", "Plzeň-jih", "Plzeň-město", "Plzeň-sever", "Prachatice", "Praha", "Praha-východ", "Prostějov", "Písek", "Přerov", "Rokycany", "Rychnov nad Kněžnou", "Semily", "Sokolov", "Strakonice", "Svitavy", "Tachov", "Teplice", "Trutnov", "Tábor", "Třebíč", "Uherské Hradiště", "Vsetín", "Vyškov", "Zlín", "Znojmo", "Ústí nad Labem", "Ústí nad Orlicí", "Česká Lípa", "České Budějovice", "Český Krumlov", "Šumperk", "Žďár nad Sázavou"]
+const todayStr   = () => new Date().toISOString().split("T")[0]
+const todayLabel = () => new Date().toLocaleDateString("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"})
+const uid        = () => Math.random().toString(36).slice(2,9)
+
+
 const ALL_ORGS_DB = [
 {id:'db1',organization:'ARCHA základní škola a mateřská škola při Církvi československé husitské',contact:'Mgr. Jitka Hřebecká',phone:'311440246',email:'skolaarcha@skolaarcha.org',type:'MŠ+ZŠ',kraj:'',okres:'',population:0,assignedTo:null,addedBy:null},
 {id:'db2',organization:'Mateřská škola a základní škola Sluníčko - Montessori, s.r.o.',contact:'Mgr. Radka Čáslavová',phone:'603984380',email:'slunicko.reditelstvi@seznam.cz',type:'MŠ+ZŠ',kraj:'',okres:'',population:0,assignedTo:null,addedBy:null},
@@ -6533,6 +6476,8 @@ const ALL_ORGS_DB = [
 ]
 
 
+const CSS = ""
+
 // ─── STATUS CONFIG ────────────────────────────────────────────────────────────
 const STATUS_META = {
   interest:    {label:"Zájem",          color:"#16A34A",bg:"#DCFCE7",icon:"✅",folder:"zájem"},
@@ -6565,9 +6510,8 @@ const uid        = () => Math.random().toString(36).slice(2,9)
 
 // Firebase helpers (injected at runtime)
 async function saveState(data) {
-  if (!window._db) return;
   try { await window._fbSetDoc(window._fbDoc(window._db,"crm","state"), data); }
-  catch(e) { console.error("Save error:", e); }
+  catch(e) { console.error("Save:", e); }
 }
 
 function CRM() {
@@ -6584,7 +6528,6 @@ function CRM() {
   const [orgDetails,setOrgDetails] = useState({})   // {orgId: {requirements, courseDays}}
   const [showAddSp,setShowAddSp]   = useState(false)
   const [dbLoading,setDbLoading]   = useState(true)
-  const [dailyGoals,setDailyGoals] = useState({})  // {spId: {date, calls, interests, doneCalls, doneInterests}}
 
   useEffect(() => {
     if (!window._db) { setDbLoading(false); return; }
@@ -6600,7 +6543,6 @@ function CRM() {
         if (d.notes) setNotes(d.notes);
         if (d.tasks) setTasks(d.tasks);
         if (d.orgDetails) setOrgDetails(d.orgDetails);
-        if (d.dailyGoals) setDailyGoals(d.dailyGoals);
       }
       setDbLoading(false);
     }, () => setDbLoading(false));
@@ -6614,7 +6556,7 @@ function CRM() {
     if (dbLoading) return;
     clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
-      saveState({salespeople,orgOverrides,customOrgs,interactions,trainings,orgRequests,notes,tasks,orgDetails,dailyGoals});
+      saveState({salespeople,orgOverrides,customOrgs,interactions,trainings,orgRequests,notes,tasks,orgDetails});
     }, 1200);
   }, [salespeople,orgOverrides,customOrgs,interactions,trainings,orgRequests,notes,tasks,orgDetails]);
 
@@ -6654,10 +6596,10 @@ function CRM() {
   );
 
   return(<>
+    <style>{CSS}</style>
     <div className="crm">
       <div className="topbar">
         <div className="topbar-brand" onClick={()=>go("home")}>◆ CRM Systém <span className="pill">OBCHOD</span></div>
-        <GlobalSearch salespeople={salespeople} customOrgs={customOrgs} orgOverrides={orgOverrides}/>
         <div style={{display:"flex",gap:6,alignItems:"center"}}>
           <button className={`btn-nav ${view==="home"?"active":""}`} onClick={()=>go("home")}>← Domů</button>
           {managerAuthed
@@ -6665,120 +6607,16 @@ function CRM() {
             :<button className={`btn-nav ${view==="manager_login"?"active":""}`} onClick={()=>go("manager_login")}>🔐 Manažer</button>}
         </div>
       </div>
-      {view==="home"&&<HomeScreen salespeople={salespeople} go={go} managerAuthed={managerAuthed} spPending={spPending} hasReq={hasReq} overdueCount={overdueCount} onAddSp={()=>setShowAddSp(true)} interactions={interactions} dailyGoals={dailyGoals}/>}
+      {view==="home"&&<HomeScreen salespeople={salespeople} go={go} managerAuthed={managerAuthed} spPending={spPending} hasReq={hasReq} overdueCount={overdueCount} onAddSp={()=>setShowAddSp(true)}/>}
       {view==="manager_login"&&<ManagerLogin authManager={authManager}/>}
       {view==="manager"&&managerAuthed&&<ManagerDashboard salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAssigned={setOrgAssigned} interactions={interactions} trainings={trainings} setTrainings={setTrainings} orgRequests={orgRequests} setOrgRequests={setOrgReqs} resolveOrg={resolveOrg}/>}
-      {currentSp&&<SalespersonProfile sp={currentSp} salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAddedBy={setOrgAddedBy} interactions={interactions} setInteractions={setIx} trainings={trainings} setTrainings={setTrainings} orgRequests={orgRequests} setOrgRequests={setOrgReqs} notes={notes} setNotes={setNotes} tasks={tasks} setTasks={setTasks} orgDetails={orgDetails} setOrgDetails={setOrgDetails} resolveOrg={resolveOrg} dailyGoals={dailyGoals} setDailyGoals={setDailyGoals}/>}
+      {currentSp&&<SalespersonProfile sp={currentSp} salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAddedBy={setOrgAddedBy} interactions={interactions} setInteractions={setIx} trainings={trainings} setTrainings={setTrainings} orgRequests={orgRequests} setOrgRequests={setOrgReqs} notes={notes} setNotes={setNotes} tasks={tasks} setTasks={setTasks} orgDetails={orgDetails} setOrgDetails={setOrgDetails} resolveOrg={resolveOrg}/>}
       {showAddSp&&<AddSpModal onAdd={addSP} onClose={()=>setShowAddSp(false)}/>}
     </div>
   </>);
 }
 
-function GlobalSearch({salespeople,customOrgs,orgOverrides}){
-  const [q,setQ]=useState("")
-  const [open,setOpen]=useState(false)
-  const ref=useRef(null)
-
-  useEffect(()=>{
-    const handler=e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false)}
-    document.addEventListener("mousedown",handler)
-    return()=>document.removeEventListener("mousedown",handler)
-  },[])
-
-  const results=useMemo(()=>{
-    if(q.trim().length<2)return[]
-    const ql=q.toLowerCase()
-    const allOrgs=[
-      ...customOrgs.map(o=>({...o,_src:"custom"})),
-      ...ALL_ORGS_DB.map(o=>{const ov=orgOverrides[o.id];return ov?{...o,...ov,_src:"db"}:{...o,_src:"db"}})
-    ]
-    return allOrgs.filter(o=>o.organization.toLowerCase().includes(ql)||(o.contact||"").toLowerCase().includes(ql)).slice(0,6).map(o=>{
-      const owner=salespeople.find(s=>s.id===o.addedBy||s.id===o.assignedTo)
-      return{...o,owner}
-    })
-  },[q,customOrgs,orgOverrides,salespeople])
-
-  return(
-    <div ref={ref} className="topbar-search">
-      <span className="topbar-search-icon">&#128269;</span>
-      <input
-        className="topbar-search-inp"
-        placeholder="Hledat organizaci…"
-        value={q}
-        onChange={e=>{setQ(e.target.value);setOpen(true)}}
-        onFocus={()=>setOpen(true)}
-      />
-      {open&&q.length>=2&&(
-        <div className="topbar-search-result">
-          {results.length===0&&<div className="tsr-item"><div className="tsr-free">Nenalezeno — organizace je pravděpodobně volná</div></div>}
-          {results.map(o=>(
-            <div key={o.id} className="tsr-item">
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
-                <div className="tsr-org">{o.organization}</div>
-                {o.owner
-                  ?<span className="tsr-badge-owned">✓ {o.owner.emoji} {o.owner.name}</span>
-                  :<span className="tsr-badge-free">Volná</span>}
-              </div>
-              {o.contact&&<div className="tsr-free">{o.contact}{o.type&&<span style={{marginLeft:6,opacity:.7}}>{o.type}</span>}</div>}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function Zebricek({salespeople,interactions,dailyGoals}){
-  const [period,setPeriod]=useState("dnes")
-  const today=todayStr()
-  const weekAgo=new Date(Date.now()-7*86400000).toISOString().split("T")[0]
-  const monthAgo=new Date(Date.now()-30*86400000).toISOString().split("T")[0]
-
-  const ranked=useMemo(()=>{
-    return salespeople.map(sp=>{
-      const ix=interactions.filter(i=>i.spId===sp.id&&(
-        period==="dnes"?i.date===today:
-        period==="tyden"?i.date>=weekAgo:
-        i.date>=monthAgo
-      ))
-      const zajem=ix.filter(i=>i.status==="interest"||i.status==="termin").length
-      const total=ix.length
-      return{sp,zajem,total}
-    }).sort((a,b)=>b.zajem-a.zajem||b.total-a.total)
-  },[salespeople,interactions,period])
-
-  const max=ranked[0]?.zajem||1
-  const medals=["🥇","🥈","🥉"]
-
-  return(<div className="zebricek-wrap">
-    <div className="zebricek-title">🏆 Žebříček týmu</div>
-    <div className="zebricek-period">
-      {[["dnes","Dnes"],["tyden","Týden"],["mesic","Měsíc"]].map(([k,l])=>(
-        <button key={k} className={`zp-btn ${period===k?"active":""}`} onClick={()=>setPeriod(k)}>{l}</button>
-      ))}
-    </div>
-    {ranked.map(({sp,zajem,total},i)=>(
-      <div key={sp.id} className="rank-row">
-        <div className="rank-pos">{medals[i]||`${i+1}.`}</div>
-        <div className="rank-avatar" style={{background:sp.color+"22",border:`2px solid ${sp.color}`}}>{sp.emoji}</div>
-        <div style={{flex:1}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:3}}>
-            <div className="rank-name">{sp.name}</div>
-            <div style={{display:"flex",gap:8,fontSize:11}}>
-              <span style={{color:"#16A34A",fontWeight:700}}>✅ {zajem}</span>
-              <span style={{color:"var(--muted)",fontWeight:600}}>/ {total}</span>
-            </div>
-          </div>
-          <div className="rank-bar-bg">
-            <div className="rank-bar-fill" style={{width:`${max>0?Math.round(zajem/max*100):0}%`,background:sp.color}}/>
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>)
-}
-
-function HomeScreen({salespeople,go,managerAuthed,spPending,hasReq,overdueCount,onAddSp,interactions,dailyGoals}){
+function HomeScreen({salespeople,go,managerAuthed,spPending,hasReq,overdueCount,onAddSp}){
   return(<div className="screen"><div className="home-wrap">
     <div className="home-title">Kdo jste?</div>
     <div className="home-sub">Klikněte na svůj profil pro přístup k pracovní ploše.</div>
@@ -6801,7 +6639,6 @@ function HomeScreen({salespeople,go,managerAuthed,spPending,hasReq,overdueCount,
         <div className="sp-role">Nový obchodník</div>
       </div>
     </div>
-    <Zebricek salespeople={salespeople} interactions={interactions} dailyGoals={dailyGoals}/>
   </div></div>);
 }
 
@@ -6836,8 +6673,12 @@ function ManagerLogin({authManager}){
 }
 
 // ─── SALESPERSON PROFILE ──────────────────────────────────────────────────────
-function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverrides,setOrgAddedBy,interactions,setInteractions,trainings,setTrainings,orgRequests,setOrgRequests,notes,setNotes,tasks,setTasks,orgDetails,setOrgDetails,resolveOrg,dailyGoals,setDailyGoals}){
+function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverrides,setOrgAddedBy,interactions,setInteractions,trainings,setTrainings,orgRequests,setOrgRequests,notes,setNotes,tasks,setTasks,orgDetails,setOrgDetails,resolveOrg}){
+  const [mainTab,setMainTab]     = useState("orgs")  // orgs | tasks | search
   const [activeFolder,setFolder] = useState("all")
+  const [activeCat,setActiveCat] = useState("vse")  // vse | obec | skolka | skola
+  const [searchQ,setSearchQ]     = useState("")
+  const [searchResult,setSearchResult] = useState(null)
   const [expandedOrg,setExpOrg]  = useState(null)
   const [activeOrgTab,setOrgTab] = useState({})  // {orgId: tab}
   const [addForm,setAddForm]     = useState({organization:"",contact:"",phone:"",email:"",type:"",web:""})
@@ -6845,59 +6686,6 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
   const [newTaskText,setNTT]     = useState({})
   const [newTaskDate,setNTD]     = useState({})
   const [trainInputs,setTrIn]    = useState({})
-  const [callStatuses,setCallStatuses] = useState({})  // {orgId: 'volano'|'nedovolano'|'cekame'}
-  const [showMedal,setShowMedal] = useState(false)
-  const [medalMsg,setMedalMsg]   = useState("")
-  const todayGoal = useMemo(()=>dailyGoals?.[sp.id]||null,[dailyGoals,sp.id])
-  const todayDoneCalls    = useMemo(()=>interactions.filter(i=>i.spId===sp.id&&i.date===todayStr()).length,[interactions,sp.id])
-  const todayDoneInterests= useMemo(()=>interactions.filter(i=>i.spId===sp.id&&i.date===todayStr()&&(i.status==="interest"||i.status==="termin")).length,[interactions,sp.id])
-  const goalActive = todayGoal&&todayGoal.date===todayStr()
-  const [goalCalls,setGoalCalls]   = useState(10)
-  const [goalInts,setGoalInts]     = useState(3)
-  const [medalShown,setMedalShown] = useState({calls:false,ints:false})
-
-  useEffect(()=>{
-    if(!goalActive)return
-    const cp=todayDoneCalls>=todayGoal.calls
-    const ip=todayDoneInterests>=todayGoal.interests
-    if(cp&&!medalShown.calls&&ip&&!medalShown.ints){setMedalMsg("Splnil/a jsi oba cíle! Dnešek patří tobě! 🔥");setShowMedal(true);setMedalShown({calls:true,ints:true})}
-    else if(ip&&!medalShown.ints){setMedalMsg("Cíl zájmů splněn! Jedeš! 💪");setShowMedal(true);setMedalShown(p=>({...p,ints:true}))}
-    else if(cp&&!medalShown.calls){setMedalMsg("Cíl hovorů splněn! Makáš naplno! ⚡");setShowMedal(true);setMedalShown(p=>({...p,calls:true}))}
-  },[todayDoneCalls,todayDoneInterests,goalActive,todayGoal])
-
-  const startGoal=()=>{
-    setDailyGoals(p=>({...p,[sp.id]:{date:todayStr(),calls:goalCalls,interests:goalInts}}))
-    setMedalShown({calls:false,ints:false})
-  }
-  const [motivText,setMotivText] = useState("")
-  const [motivLoading,setMotivLoading] = useState(true)
-
-  useEffect(()=>{
-    const cacheKey = `motiv_${sp.id}_${todayStr()}`
-    const cached = (() => { try { return localStorage.getItem(cacheKey) } catch { return null } })()
-    if (cached) { setMotivText(cached); setMotivLoading(false); return }
-    setMotivLoading(true)
-    fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 120,
-        messages: [{
-          role: "user",
-          content: `Napiš JEDNU krátkou motivační větu (max 20 slov) pro obchodníka jménem ${sp.name} (${sp.emoji}). Věta musí být povzbudivá, energická, aby měl chuť volat školám a vydělávat. Bez uvozovek, bez vysvětlení, jen samotná věta.`
-        }]
-      })
-    })
-    .then(r=>r.json())
-    .then(d=>{
-      const text = d.content?.[0]?.text?.trim() || "Dnes je skvělý den udělat skvělý obchod!"
-      setMotivText(text)
-      setMotivLoading(false)
-      try { localStorage.setItem(cacheKey, text) } catch {}
-    })
-    .catch(()=>{ setMotivText("Každý telefon je krok k úspěchu – jde se na to! 💪"); setMotivLoading(false) })
-  },[sp.id])
 
   const myCustom  = customOrgs.filter(o=>o.addedBy===sp.id)
   const asgCustom = customOrgs.filter(o=>o.assignedTo===sp.id&&o.addedBy!==sp.id)
@@ -6921,8 +6709,6 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
     const ix=[...interactions].filter(i=>i.orgId===orgId&&i.spId===sp.id).sort((a,b)=>b.date>a.date?1:-1)
     return ix.find(i=>Object.keys(STATUS_META).includes(i.status))?.status||null
   }
-
-  const setCallStatus=(orgId,cs)=>setCallStatuses(p=>({...p,[orgId]:p[orgId]===cs?null:cs}))
 
   const setStatus=(orgId,status)=>{
     setInteractions(p=>[...p.filter(i=>!(i.orgId===orgId&&i.spId===sp.id&&i.date===today&&Object.keys(STATUS_META).includes(i.status))),{id:Date.now(),orgId,spId:sp.id,status,date:today}])
@@ -7016,18 +6802,34 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
     return STATUS_TO_FOLDER[s]||"nove"
   }
 
+  const getCatFilter = (org) => {
+    if(activeCat==="vse") return true
+    if(activeCat==="obec") return org.type==="Obec"
+    if(activeCat==="skolka") return org.type==="MŠ"||org.type==="MŠ+ZŠ"
+    if(activeCat==="skola") return ["ZŠ","SŠ","ZŠ+SŠ","Ostatní"].includes(org.type)
+    return true
+  }
+
+  const filteredByCat = useMemo(()=>allMy.filter(getCatFilter),[allMy,activeCat])
+
   const filteredOrgs = useMemo(()=>{
-    return allMy.filter(org=>{
+    return filteredByCat.filter(org=>{
       if(activeFolder==="all") return true
       return getOrgFolder(org.id)===activeFolder
     })
-  },[allMy,activeFolder,interactions])
+  },[filteredByCat,activeFolder,interactions])
 
   const folderCounts = useMemo(()=>{
     const counts={all:allMy.length}
     allMy.forEach(org=>{const f=getOrgFolder(org.id);counts[f]=(counts[f]||0)+1})
     return counts
   },[allMy,interactions])
+
+  const folderCountsByCat = useMemo(()=>{
+    const counts={all:filteredByCat.length}
+    filteredByCat.forEach(org=>{const f=getOrgFolder(org.id);counts[f]=(counts[f]||0)+1})
+    return counts
+  },[filteredByCat,interactions])
 
   const interests  = myIx.filter(i=>i.status==="interest").length
   const noInt      = myIx.filter(i=>i.status==="no_interest").length
@@ -7052,6 +6854,7 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
     const curTab     = getOrgTabActive(org.id)
     const isAsgn     = allAsgn.some(a=>a.id===org.id)
     const isCustom   = customOrgs.some(o=>o.id===org.id)
+
     return(<div key={org.id} className="org-card">
       <div className="org-head" onClick={()=>setExpOrg(isExp?null:org.id)}>
         <div style={{flex:1}}>
@@ -7059,9 +6862,6 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
             <div className="org-org">{org.organization}</div>
             <span className={`tag-type ${isObec?"tag-obec":""}`}>{org.type}</span>
             {sm&&<span className="sbadge" style={{background:sm.bg,color:sm.color}}>{sm.icon} {sm.label}</span>}
-            {callStatuses[org.id]==="volano"&&<span className="sbadge s-volano">📞 Voláno</span>}
-            {callStatuses[org.id]==="nedovolano"&&<span className="sbadge s-nedovol">📵 Nedovoláno</span>}
-            {callStatuses[org.id]==="cekame"&&<span className="sbadge s-cekame">⏳ Čeká zpětná vazba</span>}
           </div>
           <div className="org-meta">
             {org.contact&&<span>👤 {org.contact}</span>}
@@ -7099,13 +6899,7 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
               <button className={`btn-status ${status==="no_contact"?"s-nokontakt":""}`}  onClick={()=>setStatus(org.id,"no_contact")}>🚫 Nekontaktovat</button>
               <button className={`btn-status ${status==="termin"?"s-termin":""}`}         onClick={()=>setStatus(org.id,"termin")}>📅 Má termín</button>
             </div>
-            <div className="call-status-row">
-              <div className="sec-hd" style={{width:"100%",marginBottom:6}}>Stav volání</div>
-              <button className={`btn-status ${callStatuses[org.id]==="volano"?"s-volano":""}`} onClick={()=>setCallStatus(org.id,"volano")}>📞 Voláno</button>
-              <button className={`btn-status ${callStatuses[org.id]==="nedovolano"?"s-nedovol":""}`} onClick={()=>setCallStatus(org.id,"nedovolano")}>📵 Nedovoláno</button>
-              <button className={`btn-status ${callStatuses[org.id]==="cekame"?"s-cekame":""}`} onClick={()=>setCallStatus(org.id,"cekame")}>⏳ Čekáme na zpětnou vazbu</button>
-            </div>
-            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginTop:10}}>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginTop:8}}>
               {org.email&&<a href={`mailto:${org.email}`} className="web-link">✉️ {org.email}</a>}
               {org.phone&&<a href={`tel:${org.phone}`} className="web-link">📞 {org.phone}</a>}
               {org.web&&<a href={org.web.startsWith("http")?org.web:"https://"+org.web} target="_blank" rel="noopener" className="web-link">🌐 Webové stránky</a>}
@@ -7219,15 +7013,6 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
         </div>
       </div>
 
-      <div className="motiv-banner">
-        {motivLoading
-          ?<div className="motiv-loading">✨ Připravuji dnešní motivaci…</div>
-          :<>
-            <div className="motiv-text">"{motivText}"</div>
-            <div className="motiv-sub">💡 DNEŠNÍ MOTIVACE · {todayLabel()}</div>
-          </>}
-      </div>
-
       {(overdueTasks.length>0||todayTasks.length>0)&&<div className="notif-banner">
         <div className="notif-banner-title">⚠️ Připomínky ({overdueTasks.length+todayTasks.length})</div>
         {overdueTasks.slice(0,3).map(t=>{
@@ -7239,49 +7024,6 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
           return<div key={t.id} className="notif-item">📌 <b>{org?.organization||"?"}</b>: {t.text}</div>
         })}
       </div>}
-
-      {showMedal&&<div className="medal-modal" onClick={()=>setShowMedal(false)}>
-        <div className="medal-box" onClick={e=>e.stopPropagation()}>
-          <div className="cf-row">{["#FFD700","#FF6B35","#4ECDC4","#45B7D1","#96CEB4","#FFD700","#FF6B35","#4ECDC4"].map((c,i)=><div key={i} className="cf-dot" style={{background:c,animationDelay:i*0.08+"s"}}/>)}</div>
-          <span className="medal-emoji">🥇</span>
-          <div className="medal-title">Skvělá práce, {sp.name}!</div>
-          <div className="medal-sub">{medalMsg}</div>
-          <button className="medal-close-btn" onClick={()=>setShowMedal(false)}>Pokračovat 💪</button>
-        </div>
-      </div>}
-
-      {!goalActive
-        ?<div className="goal-setup-card">
-          <div className="goal-setup-title">🎯 Nastav si dnešní cíl</div>
-          <div className="goal-inp-row">
-            <div className="goal-inp-label">📞 Počet hovorů</div>
-            <input className="goal-inp-field" type="number" min="1" max="200" value={goalCalls} onChange={e=>setGoalCalls(parseInt(e.target.value)||1)}/>
-          </div>
-          <div className="goal-inp-row">
-            <div className="goal-inp-label">✅ Počet zájmů</div>
-            <input className="goal-inp-field" type="number" min="1" max="50" value={goalInts} onChange={e=>setGoalInts(parseInt(e.target.value)||1)}/>
-          </div>
-          <button className="goal-start-btn" onClick={startGoal}>🚀 Začít pracovat!</button>
-        </div>
-        :<div className="goal-progress-card">
-          <div style={{fontWeight:700,fontSize:12,marginBottom:10}}>🎯 Dnešní cíl</div>
-          <div className="gp-item">
-            <div className="gp-header">
-              <span style={{color:"var(--muted)"}}>📞 Hovory</span>
-              <span style={{fontWeight:700,color:"#2563EB"}}>{todayDoneCalls} / {todayGoal.calls}</span>
-            </div>
-            <div className="gp-bar-bg"><div className="gp-bar-fill" style={{width:`${Math.min(100,Math.round(todayDoneCalls/todayGoal.calls*100))}%`,background:"#2563EB"}}/></div>
-            <div className="gp-pct" style={{color:"#2563EB"}}>{Math.min(100,Math.round(todayDoneCalls/todayGoal.calls*100))}%{todayDoneCalls>=todayGoal.calls?" 🎉":""}</div>
-          </div>
-          <div className="gp-item">
-            <div className="gp-header">
-              <span style={{color:"var(--muted)"}}>✅ Zájmy</span>
-              <span style={{fontWeight:700,color:"#16A34A"}}>{todayDoneInterests} / {todayGoal.interests}</span>
-            </div>
-            <div className="gp-bar-bg"><div className="gp-bar-fill" style={{width:`${Math.min(100,Math.round(todayDoneInterests/todayGoal.interests*100))}%`,background:"#16A34A"}}/></div>
-            <div className="gp-pct" style={{color:"#16A34A"}}>{Math.min(100,Math.round(todayDoneInterests/todayGoal.interests*100))}%{todayDoneInterests>=todayGoal.interests?" 🎉":""}</div>
-          </div>
-        </div>}
 
       <div>
         {myReqs.length>0
@@ -7343,22 +7085,137 @@ function SalespersonProfile({sp,salespeople,customOrgs,setCustomOrgs,orgOverride
     </div>
 
     <div className="profile-right">
-      <div style={{fontSize:16,fontWeight:700}}>Moje organizace <span style={{fontSize:12,color:"var(--muted)",fontWeight:400}}>({allMy.length})</span></div>
 
-      <div className="folder-tabs">
-        {FOLDERS.map(f=>{
-          const cnt=f.id==="all"?allMy.length:(folderCounts[f.id]||0)
-          if(f.id!=="all"&&cnt===0) return null
-          return(<button key={f.id} className={`folder-tab ${activeFolder===f.id?"active":""}`}
-            style={activeFolder===f.id?{background:f.color}:{}}
-            onClick={()=>setFolder(f.id)}>
-            {f.icon} {f.label} <span className="folder-count" style={{background:activeFolder===f.id?"rgba(255,255,255,.25)":"var(--bg)"}}>{cnt}</span>
-          </button>)
-        })}
+      {/* MAIN TABS */}
+      <div className="main-tabs">
+        <button className={`main-tab ${mainTab==="orgs"?"active":""}`} onClick={()=>setMainTab("orgs")}>🏢 Organizace ({allMy.length})</button>
+        <button className={`main-tab ${mainTab==="tasks"?"active":""}`} onClick={()=>setMainTab("tasks")}>
+          ✅ Úkoly {overdueTasks.length>0&&<span style={{background:"var(--red)",color:"#fff",borderRadius:20,padding:"1px 6px",fontSize:10,marginLeft:4}}>{overdueTasks.length}</span>}
+        </button>
+        <button className={`main-tab ${mainTab==="search"?"active":""}`} onClick={()=>{setMainTab("search");setSearchQ("");setSearchResult(null)}}>🔍 Hledat</button>
       </div>
 
-      {filteredOrgs.length===0&&<div className="empty-s"><div className="empty-icon">📋</div><div>Žádné organizace v této složce.</div></div>}
-      {filteredOrgs.map(org=>renderOrgCard(org))}
+      {/* SEARCH TAB */}
+      {mainTab==="search"&&<>
+        <div className="search-bar-wrap">
+          <span className="search-bar-icon">🔍</span>
+          <input className="search-bar-input" placeholder="Napiš název organizace…" value={searchQ}
+            autoFocus
+            onChange={e=>{
+              setSearchQ(e.target.value)
+              const q=e.target.value.trim().toLowerCase()
+              if(q.length<2){setSearchResult(null);return}
+              const found=allMy.find(o=>o.organization.toLowerCase().includes(q))
+              setSearchResult(found||"none")
+            }}/>
+        </div>
+        {searchQ.length>=2&&searchResult==="none"&&<div className="empty-s"><div className="empty-icon">🔍</div><div>Žádná organizace nenalezena.</div></div>}
+        {searchQ.length>=2&&searchResult&&searchResult!=="none"&&<div className="search-result">
+          <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>{searchResult.organization}</div>
+          <div style={{fontSize:10,color:"var(--muted)",display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+            {searchResult.contact&&<span>👤 {searchResult.contact}</span>}
+            {searchResult.phone&&<span>📞 {searchResult.phone}</span>}
+            {searchResult.email&&<span>✉️ {searchResult.email}</span>}
+            {searchResult.web&&<a href={searchResult.web.startsWith("http")?searchResult.web:"https://"+searchResult.web} target="_blank" rel="noopener" className="web-link">🌐 Web</a>}
+          </div>
+          {(()=>{
+            const status=getAllTimeStatus(searchResult.id)
+            const sm=STATUS_META[status]||null
+            return sm?<span className="sbadge" style={{background:sm.bg,color:sm.color}}>{sm.icon} {sm.label}</span>:null
+          })()}
+          <button className="btn-sm green" style={{marginTop:10,width:"100%"}} onClick={()=>{setMainTab("orgs");setExpOrg(searchResult.id);setSearchQ("")}}>
+            → Otevřít organizaci
+          </button>
+        </div>}
+        {/* Show all matching */}
+        {searchQ.length>=2&&<div style={{marginTop:8}}>
+          {allMy.filter(o=>o.organization.toLowerCase().includes(searchQ.trim().toLowerCase())).map(org=>{
+            const status=getAllTimeStatus(org.id)
+            const sm=STATUS_META[status]||null
+            return(<div key={org.id} style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 13px",marginBottom:6,cursor:"pointer",transition:".15s"}}
+              onClick={()=>{setMainTab("orgs");setExpOrg(org.id);setSearchQ("")}}>
+              <div style={{fontWeight:600,fontSize:12}}>{org.organization}</div>
+              <div style={{fontSize:10,color:"var(--muted)",marginTop:2,display:"flex",gap:6,alignItems:"center"}}>
+                {org.type&&<span className={`tag-type ${org.type==="Obec"?"tag-obec":""}`}>{org.type}</span>}
+                {sm&&<span className="sbadge" style={{background:sm.bg,color:sm.color,fontSize:9}}>{sm.icon} {sm.label}</span>}
+              </div>
+            </div>)
+          })}
+        </div>}
+      </>}
+
+      {/* TASKS TAB */}
+      {mainTab==="tasks"&&<>
+        {(()=>{
+          const allMyTasks=tasks.filter(t=>t.spId===sp.id)
+          const overdue=allMyTasks.filter(t=>!t.done&&t.date&&t.date<today).sort((a,b)=>a.date>b.date?1:-1)
+          const todayT=allMyTasks.filter(t=>!t.done&&t.date===today)
+          const future=allMyTasks.filter(t=>!t.done&&t.date&&t.date>today).sort((a,b)=>a.date>b.date?1:-1)
+          const done=allMyTasks.filter(t=>t.done).slice(0,5)
+          const getOrgName=orgId=>[...customOrgs,...ALL_ORGS_DB].find(o=>o.id===orgId)?.organization||"?"
+          const renderTask=(t,isOverdue)=>(
+            <div key={t.id} className={`task-item ${isOverdue?"overdue":""} ${t.done?"done-task":""}`}>
+              <div className={`task-check ${t.done?"checked":""}`} onClick={()=>toggleTask(t.id)}>{t.done?"✓":""}</div>
+              <div style={{flex:1}}>
+                <div className={`task-text ${t.done?"done-task":""}`}>{t.text}</div>
+                <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>📍 {getOrgName(t.orgId)}</div>
+              </div>
+              {t.date&&<div className={`task-date ${isOverdue?"overdue":""}`}>{isOverdue?"⚠️ ":""}{t.date}</div>}
+              <button className="btn-sm" style={{padding:"2px 6px",fontSize:10}} onClick={()=>deleteTask(t.id)}>🗑</button>
+            </div>
+          )
+          return(<>
+            {overdue.length>0&&<div className="task-section">
+              <div className="task-section-title task-section-overdue">⚠️ Po termínu ({overdue.length})</div>
+              {overdue.map(t=>renderTask(t,true))}
+            </div>}
+            {todayT.length>0&&<div className="task-section">
+              <div className="task-section-title task-section-today">📌 Dnes ({todayT.length})</div>
+              {todayT.map(t=>renderTask(t,false))}
+            </div>}
+            {future.length>0&&<div className="task-section">
+              <div className="task-section-title task-section-future">📅 Budoucí termíny ({future.length})</div>
+              {future.map(t=>renderTask(t,false))}
+            </div>}
+            {done.length>0&&<div className="task-section">
+              <div className="task-section-title task-section-done">✅ Splněné (posledních {done.length})</div>
+              {done.map(t=>renderTask(t,false))}
+            </div>}
+            {overdue.length===0&&todayT.length===0&&future.length===0&&<div className="empty-s"><div className="empty-icon">✅</div><div>Žádné úkoly! Vše splněno.</div></div>}
+          </>)
+        })()}
+      </>}
+
+      {/* ORGS TAB */}
+      {mainTab==="orgs"&&<>
+        {/* CATEGORY TABS */}
+        <div className="cat-tabs">
+          {[
+            {id:"vse",   label:"📋 Vše",      count:allMy.length},
+            {id:"obec",  label:"🏘️ Obce",     count:allMy.filter(o=>o.type==="Obec").length},
+            {id:"skolka",label:"🧒 Školky",   count:allMy.filter(o=>o.type==="MŠ"||o.type==="MŠ+ZŠ").length},
+            {id:"skola", label:"🏫 Školy",    count:allMy.filter(o=>["ZŠ","SŠ","ZŠ+SŠ","Ostatní"].includes(o.type)).length},
+          ].map(c=><button key={c.id} className={`cat-tab ${activeCat===c.id?"active":""}`} onClick={()=>setActiveCat(c.id)}>
+            {c.label} <span style={{background:activeCat===c.id?"rgba(255,255,255,.25)":"var(--bg)",borderRadius:20,padding:"0 5px",fontSize:10}}>{c.count}</span>
+          </button>)}
+        </div>
+
+        {/* STATUS FOLDERS */}
+        <div className="folder-tabs">
+          {FOLDERS.map(f=>{
+            const cnt=f.id==="all"?filteredByCat.length:(folderCountsByCat[f.id]||0)
+            if(f.id!=="all"&&cnt===0) return null
+            return(<button key={f.id} className={`folder-tab ${activeFolder===f.id?"active":""}`}
+              style={activeFolder===f.id?{background:f.color}:{}}
+              onClick={()=>setFolder(f.id)}>
+              {f.icon} {f.label} <span className="folder-count" style={{background:activeFolder===f.id?"rgba(255,255,255,.25)":"var(--bg)"}}>{cnt}</span>
+            </button>)
+          })}
+        </div>
+
+        {filteredOrgs.length===0&&<div className="empty-s"><div className="empty-icon">📋</div><div>Žádné organizace v této kategorii.</div></div>}
+        {filteredOrgs.map(org=>renderOrgCard(org))}
+      </>}
     </div>
   </div>)
 }
@@ -7407,7 +7264,7 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
     </div>}
 
     <div className="mgr-tabs">
-      {[["report","📊 Report"],["kalendar","📆 Kalendář"],["assign","📋 Přiřadit"],["trainings","📅 Školení"],["pipeline","🔭 Pipeline"]].map(([k,l])=>(
+      {[["report","📊 Report"],["assign","📋 Přiřadit"],["trainings","📅 Školení"],["pipeline","🔭 Pipeline"]].map(([k,l])=>(
         <button key={k} className={`tab-btn ${tab===k?"active":""}`} onClick={()=>setTab(k)}>{l}</button>
       ))}
     </div>
@@ -7439,9 +7296,7 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
       </div>
     </>}
 
-    {tab==="kalendar"&&<CalendarTab salespeople={salespeople} customOrgs={customOrgs} interactions={interactions}/>}
-
-        {tab==="assign"&&<AssignTab salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAssigned={setOrgAssigned}/>}
+    {tab==="assign"&&<AssignTab salespeople={salespeople} customOrgs={customOrgs} setCustomOrgs={setCustomOrgs} orgOverrides={orgOverrides} setOrgAssigned={setOrgAssigned}/>}
 
     {tab==="trainings"&&<div style={{display:"flex",flexDirection:"column",gap:8}}>
       <div style={{fontWeight:700,fontSize:14}}>Školení dle organizace</div>
@@ -7489,138 +7344,6 @@ function ManagerDashboard({salespeople,customOrgs,setCustomOrgs,orgOverrides,set
       </div>
     </div>}
   </div></div>)
-}
-
-function CalendarTab({salespeople,customOrgs,interactions}){
-  const [selDate,setSelDate]=useState(todayStr())
-  const [viewMonth,setViewMonth]=useState(()=>{const d=new Date();return{y:d.getFullYear(),m:d.getMonth()}})
-
-  // Dny v měsíci pro mini kalendář
-  const daysInMonth=useMemo(()=>{
-    const {y,m}=viewMonth
-    const first=new Date(y,m,1)
-    const last=new Date(y,m+1,0)
-    const days=[]
-    // prázdné buňky před prvním dnem (pondělí=0)
-    let startDay=(first.getDay()+6)%7
-    for(let i=0;i<startDay;i++)days.push(null)
-    for(let d=1;d<=last.getDate();d++){
-      const dateStr=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
-      const hasData=interactions.some(i=>i.date===dateStr)
-      days.push({d,dateStr,hasData})
-    }
-    return days
-  },[viewMonth,interactions])
-
-  const monthLabel=new Date(viewMonth.y,viewMonth.m,1).toLocaleDateString('cs-CZ',{month:'long',year:'numeric'})
-  const prevMonth=()=>setViewMonth(({y,m})=>m===0?{y:y-1,m:11}:{y,m:m-1})
-  const nextMonth=()=>setViewMonth(({y,m})=>m===11?{y:y+1,m:0}:{y,m:m+1})
-
-  const dayIx=interactions.filter(i=>i.date===selDate)
-  const today=todayStr()
-
-  const dayLabel=new Date(selDate+'T12:00:00').toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'})
-
-  const stats={
-    interest:   dayIx.filter(i=>i.status==='interest').length,
-    no_interest:dayIx.filter(i=>i.status==='no_interest').length,
-    postponed:  dayIx.filter(i=>i.status==='postponed').length,
-    emailed:    dayIx.filter(i=>i.status==='emailed').length,
-    termin:     dayIx.filter(i=>i.status==='termin').length,
-    no_contact: dayIx.filter(i=>i.status==='no_contact').length,
-  }
-  const total=Object.values(stats).reduce((a,b)=>a+b,0)
-
-  const activeSps=salespeople.filter(sp=>dayIx.some(i=>i.spId===sp.id))
-  const inactiveSps=salespeople.filter(sp=>!dayIx.some(i=>i.spId===sp.id))
-
-  const getOrgName=id=>[...customOrgs,...ALL_ORGS_DB].find(o=>o.id===id)?.organization||id
-
-  return(<div className="cal-wrap">
-    {/* Mini kalendář */}
-    <div className="section-card">
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
-        <button className="cal-nav" onClick={prevMonth}>←</button>
-        <div style={{fontWeight:700,fontSize:13,textTransform:'capitalize'}}>{monthLabel}</div>
-        <button className="cal-nav" onClick={nextMonth}>→</button>
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:3,marginBottom:5}}>
-        {['Po','Út','St','Čt','Pá','So','Ne'].map(d=><div key={d} style={{textAlign:'center',fontSize:9,fontWeight:700,color:'var(--muted)',padding:'2px 0'}}>{d}</div>)}
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:3}}>
-        {daysInMonth.map((day,idx)=>day===null
-          ?<div key={'e'+idx}/>
-          :<div key={day.dateStr}
-            className={`cal-day-btn ${day.hasData?'has-data':''} ${day.dateStr===selDate?'active':''} ${day.dateStr===today?'today-d':''}`}
-            onClick={()=>setSelDate(day.dateStr)}>
-            <div className="cal-day-num">{day.d}</div>
-            {day.hasData&&<div className="cal-day-dot">●</div>}
-          </div>
-        )}
-      </div>
-      <div style={{marginTop:8,fontSize:10,color:'var(--muted)',display:'flex',gap:12}}>
-        <span><span style={{color:'#3B82F6'}}>●</span> Má aktivity</span>
-        <span><span style={{color:'var(--green)'}}>●</span> Vybraný den</span>
-      </div>
-    </div>
-
-    {/* Report zvoleného dne */}
-    <div>
-      <div className="cal-day-label" style={{marginBottom:10}}>
-        📅 {dayLabel} {selDate===today&&<span style={{background:'var(--green)',color:'#fff',fontSize:10,padding:'2px 8px',borderRadius:20,marginLeft:6,fontWeight:600}}>DNES</span>}
-      </div>
-
-      {total===0
-        ?<div className="cal-empty">
-            <div style={{fontSize:32,marginBottom:8}}>😴</div>
-            Tento den nebyly zaznamenány žádné aktivity.
-          </div>
-        :<>
-          {/* KPI */}
-          <div className="cal-kpi-row" style={{marginBottom:14}}>
-            {[[stats.interest,'#16A34A','✅ Zájem'],[stats.termin,'#7C3AED','📅 Termín'],[stats.postponed,'#D97706','⏳ Odloženo'],[stats.emailed,'#2563EB','📧 Email'],[stats.no_interest,'#DC2626','❌ Nezájem'],[stats.no_contact,'#6B7280','🚫 Nekontakt']].map(([v,c,l])=>v>0&&(
-              <div key={l} className="kpi-card"><div className="kpi-val" style={{color:c}}>{v}</div><div className="kpi-lbl">{l}</div></div>
-            ))}
-          </div>
-
-          {/* Aktivní obchodníci */}
-          <div style={{display:'flex',flexDirection:'column',gap:8}}>
-            {activeSps.map(sp=>{
-              const spIx=dayIx.filter(i=>i.spId===sp.id)
-              return(<div key={sp.id} className="cal-sp-card">
-                <div className="cal-sp-name">
-                  <span style={{fontSize:18}}>{sp.emoji}</span>{sp.name}
-                  <div style={{marginLeft:'auto',display:'flex',gap:4}}>
-                    {spIx.filter(i=>i.status==='interest').length>0&&<span className="stat-chip" style={{background:'#DCFCE7',color:'#16A34A',fontSize:10,padding:'2px 7px',borderRadius:20}}>✅{spIx.filter(i=>i.status==='interest').length}</span>}
-                    {spIx.filter(i=>i.status==='termin').length>0&&<span className="stat-chip" style={{background:'#EDE9FE',color:'#7C3AED',fontSize:10,padding:'2px 7px',borderRadius:20}}>📅{spIx.filter(i=>i.status==='termin').length}</span>}
-                    {spIx.filter(i=>i.status==='postponed').length>0&&<span className="stat-chip" style={{background:'#FEF3C7',color:'#D97706',fontSize:10,padding:'2px 7px',borderRadius:20}}>⏳{spIx.filter(i=>i.status==='postponed').length}</span>}
-                    {spIx.filter(i=>i.status==='emailed').length>0&&<span className="stat-chip" style={{background:'#DBEAFE',color:'#2563EB',fontSize:10,padding:'2px 7px',borderRadius:20}}>📧{spIx.filter(i=>i.status==='emailed').length}</span>}
-                    {spIx.filter(i=>i.status==='no_interest').length>0&&<span className="stat-chip" style={{background:'#FEE2E2',color:'#DC2626',fontSize:10,padding:'2px 7px',borderRadius:20}}>❌{spIx.filter(i=>i.status==='no_interest').length}</span>}
-                  </div>
-                </div>
-                <div>
-                  {spIx.map(i=>{const sm=STATUS_META[i.status];return(
-                    <div key={i.id} className="cal-org-row">
-                      <span style={{fontSize:13}}>{sm?.icon}</span>
-                      <span style={{flex:1,fontWeight:600}}>{getOrgName(i.orgId)}</span>
-                      <span style={{color:sm?.color,fontSize:10,fontWeight:600}}>{sm?.label}</span>
-                    </div>
-                  )})}
-                </div>
-              </div>)
-            })}
-          </div>
-
-          {/* Nepracující */}
-          {inactiveSps.length>0&&<div style={{marginTop:10,padding:'10px 14px',background:'var(--bg)',borderRadius:10,border:'1px solid var(--border)'}}>
-            <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',marginBottom:6}}>😴 NEPRACOVAL/A TENTO DEN</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-              {inactiveSps.map(sp=><span key={sp.id} style={{fontSize:12,background:'var(--card)',border:'1px solid var(--border)',borderRadius:20,padding:'3px 10px'}}>{sp.emoji} {sp.name}</span>)}
-            </div>
-          </div>}
-        </>}
-    </div>
-  </div>)
 }
 
 const PAGE_SIZE=50
@@ -7676,12 +7399,24 @@ function AssignTab({salespeople,customOrgs,setCustomOrgs,orgOverrides,setOrgAssi
 
 
 function init() {
-  initFirebase();
+  if (window._initDone) return;
+  window._initDone = true;
   const root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(React.createElement(CRM));
 }
-if (window.fbApp) init();
-else window.addEventListener('fb-ready', init, {once:true});
+// Try immediately, also listen for event
+if (window.fbApp && window.fbStore) {
+  init();
+} else {
+  window.addEventListener('fb-ready', () => setTimeout(init, 50), {once:true});
+  // Fallback: if firebase takes too long, start anyway after 3s
+  setTimeout(() => {
+    if (!window._initDone) {
+      console.warn('Firebase timeout - starting without DB');
+      init();
+    }
+  }, 3000);
+}
   </script>
 </body>
 </html>
